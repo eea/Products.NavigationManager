@@ -1,0 +1,57 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      i18n:domain="plone">
+<body>
+<div metal:define-macro="portlet"
+       i18n:domain="plone"
+       tal:omit-tag=""
+       tal:define="view here/@@application_navigation_view;
+                   root view/navigationRoot;">
+
+<dl class="portlet" id="eea-portlet-navigation-tree"
+    tal:condition="view/display">
+    <dt class="portletHeader">
+        <a href="#" 
+           class="tile"
+           tal:condition="not:root/Title"
+           tal:attributes="href string:${root/absolute_url}/sitemap" 
+           i18n:translate="box_navigation">Navigation</a>
+       <a href="#" 
+           class="tile"
+           tal:condition="root/Title"
+           tal:attributes="href string:${root/absolute_url}/sitemap"
+           tal:content="root/Title">Navigation</a>
+    </dt>
+
+    <dd class="portletItem">
+        <ul class="portletNavigationTree navTreeLevel2">
+
+            <li class="navTreeItem"
+                tal:condition="view/includeTop">
+                <tal:block define="typeClass string:contenttype-${view/rootTypeName};
+                                   selectedClass python:test(path('view/isPortalOrDefaultChild'), 'navTreeCurrentItem', '');
+                                  ">
+                   <div class="roundedBox">
+                       <a class="visualIconPadding"
+                          tal:attributes="href root/absolute_url;
+                                          title portal/Description;
+                                          class string:$selectedClass visualIconPadding;">
+                       <span tal:omit-tag=""
+                             tal:condition="python:root == portal"
+                             i18n:translate="tabs_home">Home</span>
+                       <span tal:condition="python:root != portal"
+                             tal:replace="root/Title">Home</span>
+                       </a>
+                   </div>
+                </tal:block>
+            </li>
+            <li tal:replace="structure view/createNavTree">
+                SUBTREE
+            </li>
+        </ul>
+    </dd>
+</dl>
+
+</div>
+</body>
+</html>
