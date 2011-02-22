@@ -2,6 +2,9 @@ Changelog
 =========
 [David Ichim - david.ichim@eaudeweb.ro]
 
+0.2-dev - (unreleased)
+----------------------
+
 0.1 - (2011-02-22)
 ------------------
  * Feature: eggified product to Products.NavigationManager [ichimdav #2931]
