@@ -19,7 +19,7 @@ setup(
    "Framework :: Plone",
    "Programming Language :: Python",
    ],
- keywords='EEA themecentre',
+ keywords='EEA Products NavigationManager',
  author='Antonio de Marinis (EEA), European Environment Agency',
  author_email='webadmin@eea.europa.eu',
  license='GPL',
