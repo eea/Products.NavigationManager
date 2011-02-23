@@ -42,7 +42,11 @@ from Products.Archetypes.config import TOOL_NAME as ARCHETYPETOOLNAME
 from Products.Archetypes.atapi import listTypes
 from Products.NavigationManager.config import PROJECTNAME
 from Products.NavigationManager.config import product_globals as GLOBALS
-from ZODB.Transaction import get_transaction
+
+try:
+    from ZODB.Transaction import get_transaction
+except ImportError:
+    from transaction import get as get_transaction
 
 def install(self):
     """ External Method to install NavigationManager """
