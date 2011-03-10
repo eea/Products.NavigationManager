@@ -16,13 +16,6 @@ from Products.NavigationManager.catalog import getEmptyForIndex
 from Products.NavigationManager.config import PROJECTNAME, product_globals
 from Products.NavigationManager.config import DEFAULT_ADD_CONTENT_PERMISSION
 
-CustomizationPolicy = None
-try:
-    import CustomizationPolicy
-except ImportError, err:
-    logger.debug(err)
-
-
 DirectoryView.registerDirectory('skins', product_globals)
 DirectoryView.registerDirectory('skins/NavigationManager',
                                     product_globals)
@@ -71,11 +64,6 @@ def initialize(context):
         extra_constructors = constructors,
         fti                = ftis,
         ).initialize(context)
-
-    # Apply customization-policy, if theres any
-    if CustomizationPolicy and hasattr(CustomizationPolicy, 'register'):
-        CustomizationPolicy.register(context)
-        print 'Customization policy for NavigationManager installed'
 
     # this is needed so the selectViewTemplate.cpy and
     # saveDefaultPage.cpy scripts can send events

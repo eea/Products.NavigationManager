@@ -1,42 +1,13 @@
-# File: NavigationItem.py
-#
-# Copyright (c) 2006 by []
-# Generator: ArchGenXML Version 1.4.1
-#            http://plone.org/products/archgenxml
-#
-# GNU General Public License (GPL)
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
-#
-
-__author__ = """unknown <unknown>"""
-__docformat__ = 'plaintext'
+""" Navigation Items
+"""
 
 from AccessControl import ClassSecurityInfo
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content.folder import ATFolder
-#from Products.NavigationManager.config import *
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.browser.plone import cache_decorator
 from Products.NavigationManager.config import PROJECTNAME
-##code-section module-header #fill in your manual code here
-##/code-section module-header
 
 schema = atapi.Schema((
-
     atapi.StringField(
         name='url',
         widget=atapi.StringWidget(
@@ -45,20 +16,14 @@ schema = atapi.Schema((
             i18n_domain='NavigationManager',
         )
     ),
+))
 
-),
-)
-
-##code-section after-local-schema #fill in your manual code here
-##/code-section after-local-schema
-
-NavigationItem_schema = getattr(ATFolder, 'schema', atapi.Schema(())).copy() + \
-    schema.copy()
-
-##code-section after-schema #fill in your manual code here
-##/code-section after-schema
+NavigationItem_schema = getattr(ATFolder, 'schema',
+                                atapi.Schema(())).copy() + schema.copy()
 
 class NavigationItem(ATFolder):
+    """ Navigation Item
+    """
     security = ClassSecurityInfo()
     __implements__ = (getattr(ATFolder, '__implements__', ()), )
 
@@ -80,9 +45,6 @@ class NavigationItem(ATFolder):
     typeDescMsgId = 'description_edit_navigationitem'
 
     schema = NavigationItem_schema
-
-    ##code-section class-header #fill in your manual code here
-    ##/code-section class-header
 
     # Methods
 
@@ -118,13 +80,14 @@ class NavigationItem(ATFolder):
                     fallback = True
                     fallbackLanguage = n.Language()
                 else:
-                    if wftool.getInfoFor(translation, 'review_state') != 'published':
+                    if wftool.getInfoFor(translation,
+                                         'review_state') != 'published':
                         # we have a translation but it's not published
                         # so we don't fallback here
                         continue
                     n = translation
-                    
-                    
+
+
             result.append({'item': { 'title': n.Title(),
                                      'id' : n.getId(),
                                      'description' : n.Description(),
@@ -149,12 +112,5 @@ class NavigationItem(ATFolder):
                 tabselected == 'default' and myUrl == url
         return result, selected
 
-    
+
 atapi.registerType(NavigationItem, PROJECTNAME)
-# end of class NavigationItem
-
-##code-section module-footer #fill in your manual code here
-##/code-section module-footer
-
-
-
