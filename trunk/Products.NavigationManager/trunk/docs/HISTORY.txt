@@ -4,10 +4,11 @@ Changelog
 
 0.3-dev - (unreleased)
 ----------------------
+ * Bug fix: Removed deprecated ToolInit param product_name [voineali #4139]
 
 0.2 - (2011-02-23)
 ------------------
- * Bug fix: fixes install method [ichimdav #2931] 
+ * Bug fix: fixes install method [ichimdav #2931]
 
 0.1 - (2011-02-22)
 ------------------

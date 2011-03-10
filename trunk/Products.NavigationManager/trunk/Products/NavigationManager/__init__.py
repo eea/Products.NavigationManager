@@ -100,7 +100,6 @@ def initialize(context):
     tools = [NavigationManager.NavigationManager]
     ToolInit( PROJECTNAME +' Tools',
                 tools = tools,
-                product_name = PROJECTNAME,
                 icon='tool.gif'
                 ).initialize( context )
 
