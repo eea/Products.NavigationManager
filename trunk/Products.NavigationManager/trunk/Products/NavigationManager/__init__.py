@@ -5,18 +5,14 @@ logger = logging.getLogger('Products.NavigationManager')
 
 from Products.CMFCore import utils as cmfutils
 from Products.CMFCore import DirectoryView
-from Products.CMFPlone.PloneUtilities import ToolInit
+from Products.CMFPlone.utils import ToolInit
 from Products.CMFPlone.CatalogTool import registerIndexableAttribute
-#from Products.Archetypes.atapi import *
 from Products.Archetypes.atapi import process_types
 from Products.Archetypes import listTypes
 from sections import getNavSectionsForIndex
 from Products.GenericSetup import EXTENSION, profile_registry
 from Products.CMFPlone.interfaces import IPloneSiteRoot
-
-#from Products.NavigationManager.config import *
 from Products.NavigationManager.catalog import getEmptyForIndex
-
 from Products.NavigationManager.config import PROJECTNAME, product_globals
 from Products.NavigationManager.config import DEFAULT_ADD_CONTENT_PERMISSION
 
@@ -89,6 +85,3 @@ def initialize(context):
         'ObjectModifiedEvent')
     allow_class(ObjectModifiedEvent)
     allow_module('zope.event')
-
-    ##code-section custom-init-bottom #fill in your manual code here
-    ##/code-section custom-init-bottom

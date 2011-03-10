@@ -6,6 +6,7 @@ Changelog
 ----------------------
  * Bug fix: Removed deprecated ToolInit param product_name [voineali #4139]
  * Bug fix: Fixed DeprecationWarning: CMFCorePermissions [voineali #4139]
+ * Bug fix: Fixed DeprecationWarning: PloneUtilities [voineali #4139]
 
 0.2 - (2011-02-23)
 ------------------
