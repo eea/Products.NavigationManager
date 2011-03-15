@@ -4,6 +4,7 @@ Changelog
 
 0.3-dev - (unreleased)
 ----------------------
+ * Cleanup: of pyflakes violations [ichimdav #4141]
  * Bug fix: Removed deprecated ToolInit param product_name [voineali #4139]
  * Bug fix: Fixed DeprecationWarning: CMFCorePermissions [voineali #4139]
  * Bug fix: Fixed DeprecationWarning: PloneUtilities [voineali #4139]

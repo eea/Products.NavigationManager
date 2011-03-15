@@ -64,7 +64,7 @@ class Menu(BrowserView):
             # level 3 menu
             daycare = node['children']
             node['children'] = \
-                    [ self.buildNode(child, menuid) for child in daycare ]
+                    [ self.buildNode(childe, menuid) for childe in daycare ]
             
             result[1].append(node)
             
@@ -130,8 +130,8 @@ class Menu(BrowserView):
     def createPathFromObject(self, site, menuobj):
         ''' given a menuobj, it returns a list of dictionaries for 
         global base path '''
-        navManager = getToolByName(self.context, 'portal_navigationmanager')
-        parents_ids = []
+        #navManager = getToolByName(self.context, 'portal_navigationmanager')
+        #parents_ids = []
             
         path = []
         while menuobj and menuobj.getId() != site and \

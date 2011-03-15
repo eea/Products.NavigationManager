@@ -5,6 +5,8 @@ from Products.CMFPlone.Portal import PloneSite
 from Products.CMFPlone.utils import base_hasattr, safe_callable
 from p4a.subtyper.interfaces import ISubtyper
 from zope.component import getUtility
+import logging 
+logger = logging.getLogger("Products.NavigationManager.catalog")
 
 def canBeEmpty(obj):
     """ figures out whether the object can be treaded as empty or not.
@@ -31,10 +33,10 @@ def indexObject(obj):
     if (base_hasattr(obj, 'indexObject') and safe_callable(obj.indexObject)):
         try:
             obj.indexObject()
-        except TypeError:
+        except TypeError, err:
             # Catalogs have 'indexObject' as well, but they
             # take different args, and will fail
-            pass
+            logger.info(err)
 
 def indexChildrenIfNotIndexed(obj, catalog):
     # check if there are objects that are not yet indexed

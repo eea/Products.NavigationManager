@@ -17,36 +17,38 @@ def createDefaultMenu(self):
     createMenuStructure( nav, menu, site_positions)
 
     
-def createMenuStructure(current, children, positions=[]):
+def createMenuStructure(current, children, positions = None):
+    if positions is None:
+        positions = []
 
-    for id, menuItem in children.items():
-        subMenu = getattr(aq_base(current), id, None)
+    for cid, menuItem in children.items():
+        subMenu = getattr(aq_base(current), cid, None)
 
         if subMenu is None:
-            print "adding non-existing menu with id = " + id
+            print "adding non-existing menu with id = " + cid
             current.invokeFactory('NavigationItem',
-                                         id = id,
+                                         id = cid,
                                          url = menuItem['url'],
                                          title = menuItem['title'])
-            subMenu = getattr(current, id, None)
+            subMenu = getattr(current, cid, None)
             
         if menuItem['children']:
-            print "create children for menu id = " + id
+            print "create children for menu id = " + cid
             createMenuStructure(subMenu, menuItem['children'], menuItem['positions'] )
            
 
     # positions all the children according to positions list.
 
     if current.getId() != 'portal_navigationmanager' and current != None and positions != []:
-        for id, menuItem in children.items():
+        for cid, menuItem in children.items():
           #move object as they are sorted in original position
             try:
-                print id + " - setting position to " + str(positions.index(id))
-                position = positions.index(id)
-                current.moveObject(id, position)
-                subMenu = getattr(current, id, None)
+                print cid + " - setting position to " + str(positions.index(cid))
+                position = positions.index(cid)
+                current.moveObject(cid, position)
+                subMenu = getattr(current, cid, None)
                 subMenu.reindexObject()
-            except:
-                print "ERROR: could not move object with id=" + id
+            except Exception:
+                print "ERROR: could not move object with id=" + cid
 
 

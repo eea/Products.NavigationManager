@@ -1,5 +1,5 @@
 from Products.CMFCore.utils import getToolByName
-from Products.NavigationManager.catalog import reindexTree
+#from Products.NavigationManager.catalog import reindexTree
 
 def setupVarious(context):
     # only run this step if we are in NavigationManager profile
@@ -7,7 +7,7 @@ def setupVarious(context):
     if context.readDataFile('navigationmanager_various.txt') is None:
         return
 
-    site = context.getSite()
+    #site = context.getSite()
     logger = context.getLogger('navigationamnager')
 
     setupCatalog(context)

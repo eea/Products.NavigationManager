@@ -28,7 +28,7 @@
 # Base TestCase for NavigationManager
 #
 
-from Testing import ZopeTestCase
+#from Testing import ZopeTestCase
 from Products.PloneTestCase import PloneTestCase
 
 from Products.CMFPlone.interfaces import IPloneSiteRoot

@@ -7,7 +7,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
 from Products.CMFPlone.browser.navtree import NavtreeStrategyBase
 
-from types import StringType
+#from types import StringType
 
 def buildTopicTree(context, obj=None, strategy=NavtreeStrategyBase()):
     """Create a tree structure representing a navigation tree. Context
@@ -18,7 +18,7 @@ def buildTopicTree(context, obj=None, strategy=NavtreeStrategyBase()):
     portal_url = getToolByName(context, 'portal_url')
     portal_catalog = getToolByName(context, 'portal_catalog')
 
-    showAllParents = strategy.showAllParents
+    #showAllParents = strategy.showAllParents
     rootPath = strategy.rootPath
 
     request = getattr(context, 'REQUEST', {})

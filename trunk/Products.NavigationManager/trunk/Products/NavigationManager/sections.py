@@ -2,20 +2,22 @@ from zope.interface import Interface, Attribute, implements
 from zope.component import adapts
 from zope.component.exceptions import ComponentLookupError
 from zope.app.annotation.interfaces import IAnnotations
-from zope.app.component.hooks import getSite
+#from zope.app.component.hooks import getSite
 from zope.app.event.objectevent import ObjectModifiedEvent, Attributes
-from zope.app.schema.vocabulary import IVocabularyFactory
-from zope.schema.vocabulary import SimpleTerm, SimpleVocabulary
+#from zope.app.schema.vocabulary import IVocabularyFactory
+from zope.schema.vocabulary import SimpleTerm #, SimpleVocabulary
 from zope.event import notify
-
+import logging
+logger = logging.getLogger("Products.NavigationManager.sections")
+ITranslatable = None
 try:
     from Products.LinguaPlone.interfaces import ITranslatable
-except:
-    ITranslatable = None
+except ImportError, err:
+    logger.info(err)
     
 from persistent.dict import PersistentDict
 
-from Products.CMFCore.utils import getToolByName
+#from Products.CMFCore.utils import getToolByName
 
 KEY = "NavigationManager"
 
@@ -43,19 +45,19 @@ class NavigationSectionPosition(object):
             mapping = annotations[KEY] = PersistentDict(section)
         self.mapping = mapping
 
-    def section():
-        def get(self):
-            anno = IAnnotations(self.context)
-            mapping = anno.get(KEY)
-            return mapping['section']
-        def set(self, value):
-            anno = IAnnotations(self.context)
-            mapping = anno.get(KEY)
-            mapping['section'] = value
-            info = Attributes(INavigationSectionPosition, 'section')
-            notify(ObjectModifiedEvent(self.context, info))
-        return property(get, set)
-    section = section()
+    #def section():
+    def gets(self):
+        anno = IAnnotations(self.context)
+        mapping = anno.get(KEY)
+        return mapping['section']
+    def sets(self, value):
+        anno = IAnnotations(self.context)
+        mapping = anno.get(KEY)
+        mapping['section'] = value
+        info = Attributes(INavigationSectionPosition, 'section')
+        notify(ObjectModifiedEvent(self.context, info))
+    #return property(get, set)
+    section = property(gets, sets)
 
 
 class NavigationSections(object):

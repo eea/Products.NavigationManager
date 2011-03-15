@@ -1,6 +1,6 @@
 from zope.interface import implements
 from zope.component import queryAdapter
-from zope.formlib.form import Fields, EditForm
+#from zope.formlib.form import Fields, EditForm
 from Products.NavigationManager.sections import INavigationSectionPosition, INavigationSections
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView

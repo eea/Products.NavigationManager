@@ -43,6 +43,7 @@ def initialize(context):
     """
     # imports packages and types for registration
     import NavigationItem
+    NavigationItem
     import NavigationManager
 
     # Initialize portal tools

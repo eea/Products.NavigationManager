@@ -9,7 +9,7 @@ def reindexIsEmptyForSite(context, query):
     for b in brains:
         brainsByURL[b.getURL()] = b
 
-    urls = [ b.getURL() for b in brains ]
+    urls = [ brain.getURL() for brain in brains ]
     urls.sort()
     
     deepest = []

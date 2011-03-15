@@ -126,7 +126,7 @@ class NavigationManager(UniqueObject, BaseFolder):
                 canonical = node.getCanonical()
                 if canonical is not None and canonical is not node:
                     node = canonical
-            tree, selected = node.getTree(local, tabselected, language)
+            tree, _selected = node.getTree(local, tabselected, language)
         return tree
 
 

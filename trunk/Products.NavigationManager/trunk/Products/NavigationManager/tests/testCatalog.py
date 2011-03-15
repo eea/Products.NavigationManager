@@ -26,8 +26,8 @@
 
 from Products.NavigationManager.tests.NavigationManagerTestCase import NavigationManagerTestCase
 from zope.app.component.hooks import setSite
-from zope.app.event.objectevent import ObjectModifiedEvent
-from zope.event import notify
+#from zope.app.event.objectevent import ObjectModifiedEvent
+#from zope.event import notify
 
 class TestCatalog(NavigationManagerTestCase):
     """ Test-cases for class(es) relations. """

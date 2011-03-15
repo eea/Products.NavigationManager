@@ -1,7 +1,7 @@
 from zope.interface import implements, directlyProvides, providedBy
-from zope.component import getMultiAdapter, queryUtility
+from zope.component import getMultiAdapter #, queryUtility
 
-from Acquisition import aq_base, aq_inner
+from Acquisition import aq_base #, aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
 from Products.CMFPlone.browser.interfaces import INavigationPortlet, INavtreeStrategy
@@ -11,11 +11,11 @@ from Products.CMFPlone.browser.interfaces import IDefaultPage
 from Products.CMFPlone.browser.portlets.navigation import NavigationPortlet
 from Products.CMFPlone.browser.navtree import buildFolderTree
 from Products.CMFPlone.browser.navtree import getNavigationRoot
-from Products.CMFPlone.browser.navtree import NavtreeQueryBuilder, SitemapQueryBuilder
-from Products.CMFPlone.browser.navtree import DefaultNavtreeStrategy, INavigationQueryBuilder
+from Products.CMFPlone.browser.navtree import DefaultNavtreeStrategy, NavtreeQueryBuilder
 from Products.CMFPlone.browser.navigation import DefaultPage
 from Products.CMFPlone.interfaces.Translatable import ITranslatable
-from Products.NavigationManager.browser.interfaces import IMenu
+#from Products.NavigationManager.browser.interfaces import IMenu
+
 from Products.NavigationManager.browser.interfaces import INavigationManagerRequest
 from Products.NavigationManager.browser.interfaces import INavigationManagerTree
 from Products.NavigationManager.browser.buildtopictree import buildTopicTree
@@ -76,8 +76,8 @@ def removeEmptyFolders(tree):
     for child in tree['children']:
         removeEmptyFolders(child)
 
-from Products.CMFCore.permissions import View
-from AccessControl import ClassSecurityInfo
+#from Products.CMFCore.permissions import View
+#from AccessControl import ClassSecurityInfo
 
 class ListAllNode:
     """ This is an object that pretends to be a brain. """
@@ -121,7 +121,7 @@ class NavigationManagerTree(utils.BrowserView):
         
         if menu and isAnon:
             # we only use NavigationManager if we are anonymous
-            menuTree = getMultiAdapter((context, self.request), name="eea_menu")
+            #menuTree = getMultiAdapter((context, self.request), name="eea_menu")
             mContext = menu
             queryBuilder = NavtreeManagerQueryBuilder(mContext)
 
@@ -166,7 +166,7 @@ class NavigationManagerTree(utils.BrowserView):
             topictree = buildTopicTree(mContext, obj=mContext, strategy=strategy)
 
             current, parent = getCurrentItem(tree)
-            topiccurrent, topicparent = getCurrentItem(topictree)
+            topiccurrent, _topicparent = getCurrentItem(topictree)
             if isAnon:
                 parent['children'] = topiccurrent['children']
             else:
@@ -260,8 +260,8 @@ class TopicNavtreeStrategy(NavtreeSectionStrategy):
  
     def __init__(self, context, view=None):
         NavtreeSectionStrategy.__init__(self, context, view)
-        portal_url = getToolByName(context, 'portal_url')
-        portal = portal_url.getPortalObject()
+        #portal_url = getToolByName(context, 'portal_url')
+        #portal = portal_url.getPortalObject() 
         #self.rootPath = '/'.join(context.getPhysicalPath())
         #self.rootPath = '/'.join(portal.getPhysicalPath())
         if view is not None:
@@ -273,7 +273,7 @@ class TopicNavtreeStrategy(NavtreeSectionStrategy):
 
     def decoratorFactory(self, node):
         newNode = NavtreeSectionStrategy.decoratorFactory(self, node)
-        context = utils.context(self)
+        #context = utils.context(self)
         item = node['item']
         #newNode['path'] = context.absolute_url() + '/' + item.getId
         newNode['defaultPage'] = getattr(item, 'is_default_page', False)
@@ -286,7 +286,7 @@ class NavtreeManagerQueryBuilder:
 
     def __init__(self, context):
         portal_properties = getToolByName(context, 'portal_properties')
-        portal_url = getToolByName(context, 'portal_url')
+        #portal_url = getToolByName(context, 'portal_url')
         navtree_properties = getattr(portal_properties, 'navtree_properties')
 
         query = {}

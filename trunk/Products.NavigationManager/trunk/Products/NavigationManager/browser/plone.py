@@ -5,6 +5,7 @@ from Acquisition import aq_base
 
 try:
     from Products.EEAPloneAdmin.browser.plone import PloneAdmin as Plone
+    Plone #pyflakes
 except ImportError:
     from Products.CMFPlone.browser.plone import Plone
 

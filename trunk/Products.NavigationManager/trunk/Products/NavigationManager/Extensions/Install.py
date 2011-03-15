@@ -26,27 +26,26 @@ __author__ = """unknown <unknown>"""
 __docformat__ = 'plaintext'
 
 
-import os.path
+#import os.path
 import sys
 from StringIO import StringIO
-from sets import Set
-from App.Common import package_home
+#from sets import Set
+#from App.Common import package_home
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.utils import manage_addTool
+#from Products.CMFCore.utils import manage_addTool
 from Products.ExternalMethod.ExternalMethod import ExternalMethod
 from zExceptions import NotFound, BadRequest
 
 from Products.Archetypes.Extensions.utils import installTypes
 from Products.Archetypes.Extensions.utils import install_subskin
-from Products.Archetypes.config import TOOL_NAME as ARCHETYPETOOLNAME
+#from Products.Archetypes.config import TOOL_NAME as ARCHETYPETOOLNAME
 from Products.Archetypes.atapi import listTypes
 from Products.NavigationManager.config import PROJECTNAME
 from Products.NavigationManager.config import product_globals as GLOBALS
+import logging
+logger = logging.getLogger("Products.NavigationManager.Extensions.Install")
 
-try:
-    from ZODB.Transaction import get_transaction
-except ImportError:
-    from transaction import get as get_transaction
+from transaction import get as get_transaction
 
 def install(self):
     """ External Method to install NavigationManager """
@@ -58,7 +57,8 @@ def install(self):
     # AppConfig.py (imported by config.py) to use it.
     try:
         from Products.NavigationManager.config import DEPENDENCIES
-    except:
+        DEPENDENCIES
+    except ImportError:
         DEPENDENCIES = []
     portal = getToolByName(self,'portal_url').getPortalObject()
     quickinstaller = portal.portal_quickinstaller
@@ -80,11 +80,11 @@ def install(self):
     for t in ['NavigationManager']:
         try:
             portal.manage_addProduct[PROJECTNAME].manage_addTool(t)
-        except BadRequest:
+        except BadRequest, err:
             # if an instance with the same name already exists this error will
             # be swallowed. Zope raises in an unelegant manner a 'Bad Request' error
-            pass
-        except:
+            logger.info(err)
+        except Exception:
             e = sys.exc_info()
             if e[0] != 'Bad Request':
                 raise
@@ -127,42 +127,42 @@ def install(self):
         for stylesheet in STYLESHEETS:
             try:
                 portal_css.unregisterResource(stylesheet['id'])
-            except:
-                pass
+            except Exception, err :
+                logger.info(err)
             defaults = {'id': '',
             'media': 'all',
             'enabled': True}
             defaults.update(stylesheet)
             portal_css.manage_addStylesheet(**defaults)
-    except:
+    except Exception, err:
         # No portal_css registry
-        pass
+        logger.info(err)
     from Products.NavigationManager.config import JAVASCRIPTS
     try:
         portal_javascripts = getToolByName(portal, 'portal_javascripts')
         for javascript in JAVASCRIPTS:
             try:
                 portal_javascripts.unregisterResource(javascript['id'])
-            except:
-                pass
+            except Exception, err:
+                logger.info(err)
             defaults = {'id': ''}
             defaults.update(javascript)
             portal_javascripts.registerScript(**defaults)
-    except:
+    except Exception, err:
         # No portal_javascripts registry
-        pass
+        logger.info(err)
 
     # try to call a custom install method
     # in 'AppInstall.py' method 'install'
     try:
-        install = ExternalMethod('temp', 'temp',
+        install_ext = ExternalMethod('temp', 'temp',
                                  PROJECTNAME + '.AppInstall', 'install')
     except NotFound:
-        install = None
+        install_ext = None
 
-    if install:
+    if install_ext:
         print >> out, 'Custom Install:'
-        res = install(self)
+        res = install_ext(self)
         if res:
             print >> out, res
         else:
@@ -210,14 +210,14 @@ def uninstall(self):
     # try to call a custom uninstall method
     # in 'AppInstall.py' method 'uninstall'
     try:
-        uninstall = ExternalMethod('temp', 'temp',
+        uninstall_ext = ExternalMethod('temp', 'temp',
                                    PROJECTNAME + '.AppInstall', 'uninstall')
-    except:
-        uninstall = None
+    except NotFound:
+        uninstall_ext = None
 
-    if uninstall:
+    if uninstall_ext:
         print >> out, 'Custom Uninstall:'
-        res = uninstall(self)
+        res = uninstall_ext(self)
         if res:
             print >> out, res
         else:
