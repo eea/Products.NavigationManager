@@ -1,0 +1,43 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:five="http://namespaces.zope.org/five">
+
+   <include package=".browser" />
+
+  <adapter factory=".sections.NavigationSectionPosition" />
+  <adapter factory=".sections.NavigationSections" />
+
+  <subscriber
+      for="* zope.app.container.interfaces.IObjectModifiedEvent"
+      handler=".sections.objectNavigationSet"
+      />
+
+    <browser:page
+        for="*"
+        name="eea_menu"
+        class=".browser.menu.Menu"
+        permission="zope.Public"
+        allowed_interface=".browser.interfaces.IMenu"
+        />
+
+
+    
+    <five:implements class="Products.NavigationManager.NavigationItem.NavigationItem" 
+                interface=".browser.interfaces.INavigationItem" />
+
+  <adapter
+      for=".sections.INavigationSectionPositionable"
+      provides="zope.app.annotation.interfaces.IAnnotations"
+      factory="zope.app.annotation.attribute.AttributeAnnotations"
+      />
+
+  <class class="Products.ATContentTypes.content.folder.ATFolder">
+      <implements interface=".sections.INavigationSectionPositionable" />
+  </class>
+
+  <class class="Products.ATContentTypes.content.document.ATDocument">
+      <implements interface=".sections.INavigationSectionPositionable" />
+  </class>
+
+
+</configure>
