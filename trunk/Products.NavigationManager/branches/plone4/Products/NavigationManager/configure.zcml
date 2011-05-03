@@ -1,43 +1,41 @@
-<configure xmlns="http://namespaces.zope.org/zope"
-           xmlns:browser="http://namespaces.zope.org/browser"
-           xmlns:five="http://namespaces.zope.org/five">
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:five="http://namespaces.zope.org/five">
 
-   <include package=".browser" />
+  <include file="skins.zcml" />
+  <include file="profiles.zcml" />
+
+  <include package=".browser" />
+
+  <class class="Products.NavigationManager.NavigationItem.NavigationItem">
+    <implements interface=".browser.interfaces.INavigationItem" />
+  </class>
+
+  <class class="Products.ATContentTypes.content.folder.ATFolder">
+    <implements interface=".sections.INavigationSectionPositionable" />
+  </class>
+
+  <class class="Products.ATContentTypes.content.document.ATDocument">
+    <implements interface=".sections.INavigationSectionPositionable" />
+  </class>
 
   <adapter factory=".sections.NavigationSectionPosition" />
   <adapter factory=".sections.NavigationSections" />
 
   <subscriber
-      for="* zope.app.container.interfaces.IObjectModifiedEvent"
-      handler=".sections.objectNavigationSet"
-      />
-
-    <browser:page
-        for="*"
-        name="eea_menu"
-        class=".browser.menu.Menu"
-        permission="zope.Public"
-        allowed_interface=".browser.interfaces.IMenu"
-        />
-
-
-    
-    <five:implements class="Products.NavigationManager.NavigationItem.NavigationItem" 
-                interface=".browser.interfaces.INavigationItem" />
+    for="* zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".sections.objectNavigationSet"
+    />
 
   <adapter
-      for=".sections.INavigationSectionPositionable"
-      provides="zope.app.annotation.interfaces.IAnnotations"
-      factory="zope.app.annotation.attribute.AttributeAnnotations"
-      />
+    for=".sections.INavigationSectionPositionable"
+    provides="zope.annotation.interfaces.IAnnotations"
+    factory="zope.annotation.attribute.AttributeAnnotations"
+    />
 
-  <class class="Products.ATContentTypes.content.folder.ATFolder">
-      <implements interface=".sections.INavigationSectionPositionable" />
-  </class>
-
-  <class class="Products.ATContentTypes.content.document.ATDocument">
-      <implements interface=".sections.INavigationSectionPositionable" />
-  </class>
-
+  <!-- Catalog indexers -->
+  <adapter factory=".sections.getNavSectionsForIndex" name="navSection" />
+  <adapter factory=".catalog.getEmptyForIndex" name="is_empty" />
 
 </configure>

@@ -4,7 +4,7 @@ from Products.CMFCore.utils import getToolByName
 def setupVarious(context):
     # only run this step if we are in NavigationManager profile
     # learned from Aspelis book, Professional Plone Development
-    if context.readDataFile('navigationmanager_various.txt') is None:
+    if context.readDataFile('products.navigationmanager.txt') is None:
         return
 
     #site = context.getSite()

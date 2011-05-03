@@ -1,0 +1,12 @@
+<configure
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+  <genericsetup:registerProfile
+    name="testfixture"
+    title="Products.NavigationManager testing"
+    directory="profile/testfixture"
+    description="Extension profile for testing Products.NavigationManager"
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    />
+
+</configure>

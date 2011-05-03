@@ -1,27 +1,31 @@
 from zope.interface import implements, directlyProvides, providedBy
-from zope.component import getMultiAdapter #, queryUtility
+from zope.component import getMultiAdapter
 
-from Acquisition import aq_base #, aq_inner
+from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
-from Products.CMFPlone.browser.interfaces import INavigationPortlet, INavtreeStrategy
-from Products.CMFPlone.browser.interfaces import INavigationQueryBuilder
-from Products.CMFPlone.browser.interfaces import INavigationRoot
-from Products.CMFPlone.browser.interfaces import IDefaultPage
+
+from plone.app.layout.navigation.root import getNavigationRoot
+from plone.app.layout.navigation.interfaces import (
+    INavtreeStrategy,
+    INavigationQueryBuilder,
+    INavigationRoot,
+    IDefaultPage
+)
+
+from Products.CMFPlone.browser.interfaces import INavigationPortlet
+
 from Products.CMFPlone.browser.portlets.navigation import NavigationPortlet
 from Products.CMFPlone.browser.navtree import buildFolderTree
-from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.browser.navtree import DefaultNavtreeStrategy, NavtreeQueryBuilder
 from Products.CMFPlone.browser.navigation import DefaultPage
 from Products.CMFPlone.interfaces.Translatable import ITranslatable
-#from Products.NavigationManager.browser.interfaces import IMenu
-
 from Products.NavigationManager.browser.interfaces import INavigationManagerRequest
 from Products.NavigationManager.browser.interfaces import INavigationManagerTree
 from Products.NavigationManager.browser.buildtopictree import buildTopicTree
 
 def getApplicationRoot(obj):
-    portal_url = getToolByName(obj, 'portal_url')	    
+    portal_url = getToolByName(obj, 'portal_url')
     portal = portal_url.getPortalObject()
 
     while not INavigationRoot.providedBy(obj) and aq_base(obj) is not aq_base(portal):
@@ -34,18 +38,18 @@ def getMenu(context):
     submenu = getattr(context, 'navigationmanager_submenu', None)
     if menuid is None or submenu == 'plone navigation':
         return None
-    
+
     catalog = getToolByName(context, 'portal_catalog')
     query = { 'portal_type' : 'NavigationItem' }
     if menuid is not None:
-        query['id'] = menuid 
+        query['id'] = menuid
     else:
         query['getUrl'] = context.absolute_url()
     if ITranslatable.isImplementedBy(context) and context.Language() is not None \
             and len(context.Language()) > 0:
         query['Language'] = context.Language()
     menuItems = catalog.searchResults( query )
-    
+
     if len(menuItems) > 0:
         navmanager = getToolByName(context, 'portal_navigationmanager')
         obj = menuItems[0].getObject()
@@ -105,7 +109,7 @@ class ListAllNode:
 class NavigationManagerTree(utils.BrowserView):
     """ Navigation Tree which combines Navigation Manager menu and plone
         default. """
-    
+
     implements(INavigationManagerTree)
 
     def navigationTreeRootPath(self):
@@ -118,7 +122,7 @@ class NavigationManagerTree(utils.BrowserView):
         strategy = None
         queryBuilder = None
         isAnon = getToolByName(context, 'portal_membership').isAnonymousUser()
-        
+
         if menu and isAnon:
             # we only use NavigationManager if we are anonymous
             #menuTree = getMultiAdapter((context, self.request), name="eea_menu")
@@ -213,7 +217,7 @@ class NavigationManagerTree(utils.BrowserView):
 
 class NavigationManagerPortlet(NavigationPortlet):
     """ EEA website navigation portlet fetches menu from navigation manager. """
-    
+
     implements(INavigationPortlet)
 
     def __init__(self, context, request):
@@ -224,10 +228,10 @@ class NavigationManagerPortlet(NavigationPortlet):
             root = getMenu(context)
             if root is not None:
                 self._root = [ root ]
-            
+
     def title(self):
         return self.navigationRoot().Title()
-    
+
     def navigationRoot(self):
         """ Override """
         if not utils.base_hasattr(self, '_root'):
@@ -237,7 +241,7 @@ class NavigationManagerPortlet(NavigationPortlet):
 class NavtreeManagerStrategy(DefaultNavtreeStrategy):
     """ The navtree strategy used for the default navigation portlet and
         respects NavigationManager submenu as root.  """
-    
+
     implements(INavtreeStrategy)
 
     def __init__(self, context, view=None):
@@ -247,21 +251,21 @@ class NavtreeManagerStrategy(DefaultNavtreeStrategy):
 
 class NavtreeSectionStrategy(DefaultNavtreeStrategy):
     """ The navtree strategy that provides navigation section info for each node. """
-        
+
     def decoratorFactory(self, node):
         newNode = DefaultNavtreeStrategy.decoratorFactory(self, node)
         item = node['item']
         newNode['navSection'] = getattr(item, 'navSection', None) or 'default'
         newNode['defaultPage'] = getattr(item, 'is_default_page', False)
         return newNode
-    
+
 class TopicNavtreeStrategy(NavtreeSectionStrategy):
     """ The navtree strategy for topics. """
- 
+
     def __init__(self, context, view=None):
         NavtreeSectionStrategy.__init__(self, context, view)
         #portal_url = getToolByName(context, 'portal_url')
-        #portal = portal_url.getPortalObject() 
+        #portal = portal_url.getPortalObject()
         #self.rootPath = '/'.join(context.getPhysicalPath())
         #self.rootPath = '/'.join(portal.getPhysicalPath())
         if view is not None:
@@ -335,7 +339,7 @@ class NavtreeManagerQueryBuilderForSections(NavtreeQueryBuilder):
         if self.query.get('depth', None) is not None:
             self.query['depth'] = 2
         else:
-            self.query['navtree'] = 2            
+            self.query['navtree'] = 2
 
 
 class DefaultPageIsNormalPage(DefaultPage):
@@ -344,4 +348,4 @@ class DefaultPageIsNormalPage(DefaultPage):
 
     def isDefaultPage(self, obj, context_=None):
         return DefaultPage.isDefaultPage(self, obj, context_) and obj.exclude_from_nav() or False
-    
+

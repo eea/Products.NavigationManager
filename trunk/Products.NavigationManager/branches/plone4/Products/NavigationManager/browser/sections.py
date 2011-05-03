@@ -6,7 +6,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Acquisition import aq_base
 from interfaces import IContentNavigationSectionMenu
-from zope.app.event.objectevent import ObjectModifiedEvent, Attributes
+from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 from zope.event import notify
 
 class SetNavigationSection(BrowserView):
@@ -51,7 +51,7 @@ class SectionsForContentNavigationMenu(BrowserView):
         navContext = self.navContext
         if not self.display():
             return []
-        
+
         context = self.context
         sections = INavigationSections(context)
         currentSection = navContext.section
@@ -74,7 +74,7 @@ class SectionsForContentNavigationMenu(BrowserView):
             menu.append( { 'id': section.value,
                            'title' : section.title,
                            'current' : currentSection == section.value })
-            
+
         if sections.right:
             menu.append( { 'id' : 'separator',
                            'title' : 'Right sections',
@@ -85,8 +85,8 @@ class SectionsForContentNavigationMenu(BrowserView):
                            'current' : currentSection == section.value  })
         return menu
 
-        
-        
+
+
 class GetNavigationSection(BrowserView):
     """ Gets navigation section for current object. """
 
@@ -120,8 +120,8 @@ class RightNavigationSectionPortlet(BrowserView):
             rendered += template(section=section.value, sectionTitle=section.title)
 
         return rendered
-    
-    
+
+
 
 
 

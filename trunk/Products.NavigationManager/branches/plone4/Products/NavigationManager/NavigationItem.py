@@ -1,7 +1,5 @@
 """ Navigation Items
 """
-
-from AccessControl import ClassSecurityInfo
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.CMFCore.utils import getToolByName
@@ -24,35 +22,22 @@ NavigationItem_schema = getattr(ATFolder, 'schema',
 class NavigationItem(ATFolder):
     """ Navigation Item
     """
-    security = ClassSecurityInfo()
-    __implements__ = (getattr(ATFolder, '__implements__', ()), )
+    meta_type = archetype_name = portal_type = 'NavigationItem'
 
-    # This name appears in the 'add' box
-    archetype_name = 'NavigationItem'
+    allowed_content_types = ['NavigationItem'] + list(
+        getattr(ATFolder, 'allowed_content_types', []))
 
-    meta_type = 'NavigationItem'
-    portal_type = 'NavigationItem'
-    allowed_content_types = ['NavigationItem'] + list(getattr(ATFolder,
-                                            'allowed_content_types', []))
     filter_content_types = 1
     global_allow = 0
     allow_discussion = False
-    #content_icon = 'NavigationItem.gif'
     immediate_view = 'base_view'
     default_view = 'base_view'
-    suppl_views = ()
-    typeDescription = "NavigationItem"
-    typeDescMsgId = 'description_edit_navigationitem'
 
     schema = NavigationItem_schema
 
-    # Methods
-
-    security.declarePublic('getTree')
     def getTree(self, local = False, tabselected='default', language = None):
-        """
-        It returns a list  of menu items objects from the root of this
-        menu manager. Useful to generate top navigation like portal tabs.
+        """ Returns a list  of menu items objects from the root of this
+            menu manager. Useful to generate top navigation like portal tabs.
         """
         request = self.REQUEST
         actualUrl = request.get('ACTUAL_URL')
@@ -112,5 +97,7 @@ class NavigationItem(ATFolder):
                 tabselected == 'default' and myUrl == url
         return result, selected
 
-
-atapi.registerType(NavigationItem, PROJECTNAME)
+def register():
+    """ Register custom type
+    """
+    atapi.registerType(NavigationItem, PROJECTNAME)

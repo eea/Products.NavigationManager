@@ -27,7 +27,13 @@
             provides="Products.CMFPlone.browser.interfaces.IDefaultPage"
             name="default_page" />
 
-
+  <browser:page
+    for="*"
+    name="eea_menu"
+    class=".menu.Menu"
+    permission="zope.Public"
+    allowed_interface=".interfaces.IMenu"
+    />
 
   <browser:page
       for=".interfaces.INavigationItem"

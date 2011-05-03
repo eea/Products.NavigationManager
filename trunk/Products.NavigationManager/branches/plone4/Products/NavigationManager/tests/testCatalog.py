@@ -1,33 +1,8 @@
-# -*- coding: utf-8 -*-
-#
-# File: testFrontpage.py
-#
-# Copyright (c) 2006 by []
-# Generator: ArchGenXML Version 1.5.1-svn
-#            http://plone.org/products/archgenxml
-#
-# GNU General Public License (GPL)
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
-#
-
-from Products.NavigationManager.tests.NavigationManagerTestCase import NavigationManagerTestCase
+""" Tests
+"""
+import unittest
+from Products.NavigationManager.tests.base import NavigationManagerTestCase
 from zope.app.component.hooks import setSite
-#from zope.app.event.objectevent import ObjectModifiedEvent
-#from zope.event import notify
 
 class TestCatalog(NavigationManagerTestCase):
     """ Test-cases for class(es) relations. """
@@ -47,7 +22,7 @@ class TestCatalog(NavigationManagerTestCase):
         self.pubrootnonfolder = self.folder.pubrootnonfolder
         self.pubrootnonfolder.invokeFactory('Folder', id='pubtest2-1')
         self.pubrootnonfolder.invokeFactory('Document', id='pubtest2-2')
-        
+
         #default page
         self.pubrootnonfolder.invokeFactory('Folder', id='pubtest_fld')
         self.pubrootnonfolder.invokeFactory('Document', id='pubtest_doc')
@@ -113,5 +88,5 @@ class TestCatalog(NavigationManagerTestCase):
         self.assertEquals(brains[0].is_empty, True)
 
 def test_suite():
-    import unittest
+    """ Suite """
     return  unittest.TestSuite(unittest.makeSuite(TestCatalog))

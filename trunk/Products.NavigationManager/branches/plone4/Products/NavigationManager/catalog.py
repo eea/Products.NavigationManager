@@ -1,3 +1,5 @@
+from zope.interface import Interface
+from plone.indexer import indexer
 from Acquisition import aq_parent, aq_inner
 from OFS.Application import Application
 from Products.CMFCore.utils import getToolByName
@@ -5,7 +7,7 @@ from Products.CMFPlone.Portal import PloneSite
 from Products.CMFPlone.utils import base_hasattr, safe_callable
 from p4a.subtyper.interfaces import ISubtyper
 from zope.component import getUtility
-import logging 
+import logging
 logger = logging.getLogger("Products.NavigationManager.catalog")
 
 def canBeEmpty(obj):
@@ -47,6 +49,7 @@ def indexChildrenIfNotIndexed(obj, catalog):
             # the object doesn't exist in catalog, so add it
             indexObject(child)
 
+@indexer(Interface)
 def getEmptyForIndex(obj, portal, **kwargs):
     can_be_empty = canBeEmpty(obj)
 

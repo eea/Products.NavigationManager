@@ -1,45 +1,24 @@
-# File: NavigationManager.py
-#
-# Copyright (c) 2006 by []
-# Generator: ArchGenXML Version 1.4.1
-#            http://plone.org/products/archgenxml
-#
-# GNU General Public License (GPL)
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.
-#
-
-__author__ = """unknown <unknown>"""
-__docformat__ = 'plaintext'
-
-from AccessControl import ClassSecurityInfo
+""" Tool
+"""
 from Products.Archetypes import atapi
 from Products.Archetypes.public import BaseFolder, BaseFolderSchema
 from Products.NavigationManager.config import PROJECTNAME
 
 # additional imports from tagged value 'import'
 from Products.CMFCore.utils import getToolByName
-
-
 from Products.CMFCore.utils import UniqueObject
-
-    
 from plone.memoize.ram import cache, global_cache
 
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone import PloneMessageFactory as _
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+from Products.statusmessages.interfaces import IStatusMessage
+
 def cacheKeyGetTree(method, self, site, tabselected='default'):
+    """ Cache key
+    """
     request = self.REQUEST
     if tabselected != 'default':
         secondkey = tabselected
@@ -49,64 +28,72 @@ def cacheKeyGetTree(method, self, site, tabselected='default'):
             secondkey = secondkey[:5]
     return (site, secondkey, request.get('LANGUAGE', 'en'))
 
-
-schema = atapi.Schema((
-
-),
-)
-
-##code-section after-local-schema #fill in your manual code here
-##/code-section after-local-schema
-
-NavigationManager_schema = BaseFolderSchema.copy() + \
-    schema.copy()
-
-##code-section after-schema #fill in your manual code here
-##/code-section after-schema
-
 class NavigationManager(UniqueObject, BaseFolder):
-    security = ClassSecurityInfo()
-    __implements__ = (getattr(UniqueObject, '__implements__', ()), ) + (getattr(BaseFolder, '__implements__', ()), )
+    """ Navigation manager
+    """
 
-    # This name appears in the 'add' box
-    archetype_name = 'NavigationManager'
-
-    meta_type = 'NavigationManager'
-    portal_type = 'NavigationManager'
+    meta_type = archetype_name = portal_type = 'NavigationManager'
     allowed_content_types = ['NavigationItem']
     filter_content_types = 1
     global_allow = 0
     allow_discussion = False
-    #content_icon = 'NavigationManager.gif'
     immediate_view = 'base_view'
     default_view = 'base_view'
-    suppl_views = ()
-    typeDescription = "NavigationManager"
-    typeDescMsgId = 'description_edit_navigationmanager'
-    #toolicon = 'NavigationManager.gif'
-
-    schema = NavigationManager_schema
-
-    ##code-section class-header #fill in your manual code here
-    ##/code-section class-header
-
-
-    # tool-constructors have no id argument, the id is fixed
-    def __init__(self, id=None):
-        BaseFolder.__init__(self,'portal_navigationmanager')
-        
-        ##code-section constructor-footer #fill in your manual code here
-        ##/code-section constructor-footer
-
+    schema = BaseFolderSchema.copy()
 
     # Methods
+    def selectViewTemplate(self, context, templateId):
+        """ Helper method to select a view template.
 
-    security.declarePublic('getTree')
+        Returns action status
+        """
+        if not ISelectableBrowserDefault.providedBy(context):
+            msg = _(u'Object does not support selecting layout templates')
+            IStatusMessage(context.REQUEST).addStatusMessage(msg, 'error')
+            return 'failure'
+
+        context.setLayout(templateId)
+        notify(ObjectModifiedEvent(context))
+
+        msg = _(u'View changed.')
+        IStatusMessage(context.REQUEST).addStatusMessage(msg, 'info')
+        return 'success'
+
+    def saveDefaultPage(self, context, objectId=None):
+        """ Helper method to select a default page for a folder view.
+
+        Returns action status
+        """
+        if not objectId:
+            msg = _(u'Please select an item to use.')
+            IStatusMessage(context.REQUEST).addStatusMessage(msg, 'error')
+            return 'missing'
+
+        if not ISelectableBrowserDefault.providedBy(context):
+            raise NotImplementedError(
+                "Object does not support setting default page")
+
+        # Also should never happen
+        if objectId not in context.objectIds():
+            msg = _(
+                u'There is no object with short name ${name} in this folder.',
+                mapping={u'name' : objectId})
+
+            IStatusMessage(context.REQUEST).addStatusMessage(msg, 'error')
+            return 'failure'
+
+        context.setDefaultPage(objectId)
+        notify(ObjectModifiedEvent(context))
+
+        msg = _(u'View changed.')
+        IStatusMessage(context.REQUEST).addStatusMessage(msg, 'info')
+        return 'success'
+
     @cache(cacheKeyGetTree)
     def getTree(self, site, tabselected='default'):
         """
-        It returns a list  of menu items objects from the root of this menu manager. 
-        Useful to generate top navigation like portal tabs. 
+        It returns a list  of menu items objects from the root of this menu manager.
+        Useful to generate top navigation like portal tabs.
         """
         portal = getToolByName(self, 'portal_url').getPortalObject()
         request = self.REQUEST
@@ -116,7 +103,7 @@ class NavigationManager(UniqueObject, BaseFolder):
             local = True
 
         fallback = getattr(self, 'navigationmanager_fallback', False)
-        
+
         tree = []
         node = getattr(self, site, None)
         language = None
@@ -130,11 +117,13 @@ class NavigationManager(UniqueObject, BaseFolder):
         return tree
 
 
-atapi.registerType(NavigationManager, PROJECTNAME)
-# end of class NavigationManager
+def register():
+    """ Register custom content-type
+    """
+    atapi.registerType(NavigationManager, PROJECTNAME)
 
 def invalidateNavigationManagerTreeCache(obj, event):
-    global_cache.invalidate('Products.NavigationManager.NavigationManager.getTree')
-
-
-
+    """ Invalidate cache
+    """
+    global_cache.invalidate(
+        'Products.NavigationManager.NavigationManager.getTree')

@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-
-from Products.NavigationManager.tests.NavigationManagerTestCase import NavigationManagerTestCase
+""" Tests
+"""
+import unittest
+from Products.NavigationManager.tests.base import NavigationManagerTestCase
 from zope.app.component.hooks import setSite
-#from zope.app.event.objectevent import ObjectModifiedEvent
-#from zope.event import notify
 from Products.NavigationManager.browser import menu
 
 class TestMenu(NavigationManagerTestCase):
@@ -30,5 +29,5 @@ class TestMenu(NavigationManagerTestCase):
 
 
 def test_suite():
-    import unittest
+    """ Suite """
     return  unittest.TestSuite(unittest.makeSuite(TestMenu))

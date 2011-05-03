@@ -1,0 +1,25 @@
+<configure
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+  xmlns:five="http://namespaces.zope.org/five"
+  i18n_domain="eea">
+
+  <five:registerPackage package="." initialize=".initialize" />
+
+  <genericsetup:registerProfile
+    name="default"
+    title="NavigationManager"
+    directory="profiles/default"
+    description="Extension profile for Products.NavigationManager"
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    />
+
+  <genericsetup:importStep
+    name="navigationmanager_various"
+    title="NavigationManager: miscellaneous import steps"
+    description="Various setup for Products.NavigationManager"
+    handler="Products.NavigationManager.setuphandlers.setupVarious">
+    <depends name="catalog" />
+  </genericsetup:importStep>
+
+</configure>
