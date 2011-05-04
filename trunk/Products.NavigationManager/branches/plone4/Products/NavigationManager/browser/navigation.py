@@ -14,15 +14,14 @@ from plone.app.layout.navigation.interfaces import (
 )
 
 from Products.CMFPlone.browser.interfaces import INavigationPortlet
-
-from Products.CMFPlone.browser.portlets.navigation import NavigationPortlet
-from Products.CMFPlone.browser.navtree import buildFolderTree
+from plone.app.layout.navigation.navtree import buildFolderTree
 from Products.CMFPlone.browser.navtree import DefaultNavtreeStrategy, NavtreeQueryBuilder
-from Products.CMFPlone.browser.navigation import DefaultPage
-from Products.CMFPlone.interfaces.Translatable import ITranslatable
+from plone.app.layout.navigation.defaultpage import DefaultPage
+from Products.PloneLanguageTool.interfaces import ITranslatable
 from Products.NavigationManager.browser.interfaces import INavigationManagerRequest
 from Products.NavigationManager.browser.interfaces import INavigationManagerTree
 from Products.NavigationManager.browser.buildtopictree import buildTopicTree
+from Products.Five.browser import BrowserView
 
 def getApplicationRoot(obj):
     portal_url = getToolByName(obj, 'portal_url')
@@ -106,7 +105,7 @@ class ListAllNode:
     def Description(self):
         return ''
 
-class NavigationManagerTree(utils.BrowserView):
+class NavigationManagerTree(BrowserView):
     """ Navigation Tree which combines Navigation Manager menu and plone
         default. """
 
@@ -214,29 +213,29 @@ class NavigationManagerTree(utils.BrowserView):
             removeEmptyFolders(tree)
         return tree
 
+#TODO Fix me
+#class NavigationManagerPortlet(NavigationPortlet):
+    #""" EEA website navigation portlet fetches menu from navigation manager. """
 
-class NavigationManagerPortlet(NavigationPortlet):
-    """ EEA website navigation portlet fetches menu from navigation manager. """
+    #implements(INavigationPortlet)
 
-    implements(INavigationPortlet)
+    #def __init__(self, context, request):
+        #NavigationPortlet.__init__(self, context, request)
+        #mship = getToolByName(context, 'portal_membership')
+        #isAnonymous = mship.isAnonymousUser()
+        #if isAnonymous:
+            #root = getMenu(context)
+            #if root is not None:
+                #self._root = [ root ]
 
-    def __init__(self, context, request):
-        NavigationPortlet.__init__(self, context, request)
-        mship = getToolByName(context, 'portal_membership')
-        isAnonymous = mship.isAnonymousUser()
-        if isAnonymous:
-            root = getMenu(context)
-            if root is not None:
-                self._root = [ root ]
+    #def title(self):
+        #return self.navigationRoot().Title()
 
-    def title(self):
-        return self.navigationRoot().Title()
-
-    def navigationRoot(self):
-        """ Override """
-        if not utils.base_hasattr(self, '_root'):
-            self._root = [ NavigationPortlet.navigationRoot(self) ]
-        return self._root[0]
+    #def navigationRoot(self):
+        #""" Override """
+        #if not utils.base_hasattr(self, '_root'):
+            #self._root = [ NavigationPortlet.navigationRoot(self) ]
+        #return self._root[0]
 
 class NavtreeManagerStrategy(DefaultNavtreeStrategy):
     """ The navtree strategy used for the default navigation portlet and

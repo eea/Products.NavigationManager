@@ -22,8 +22,8 @@ def setup_navigationmanager():
 
 setup_navigationmanager()
 PloneTestCase.setupPloneSite(extension_profiles = [
-    'NavigationManager:default',
-    'NavigationManager:testfixture'
+    'Products.NavigationManager:default',
+    'Products.NavigationManager.tests:testfixture'
 ])
 
 class NavigationManagerTestCase(PloneTestCase.PloneTestCase):

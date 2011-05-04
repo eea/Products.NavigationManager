@@ -1,6 +1,5 @@
 """ Tool
 """
-from Products.Archetypes import atapi
 from Products.Archetypes.public import BaseFolder, BaseFolderSchema
 from Products.NavigationManager.config import PROJECTNAME
 
@@ -115,12 +114,6 @@ class NavigationManager(UniqueObject, BaseFolder):
                     node = canonical
             tree, _selected = node.getTree(local, tabselected, language)
         return tree
-
-
-def register():
-    """ Register custom content-type
-    """
-    atapi.registerType(NavigationManager, PROJECTNAME)
 
 def invalidateNavigationManagerTreeCache(obj, event):
     """ Invalidate cache

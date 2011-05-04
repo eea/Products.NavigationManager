@@ -5,4 +5,8 @@
    <element value="portal_navigationmanager"/>
   </property>
  </object>
+ <object name="site_properties">
+   <property name="hide_if_empty" type="lines" purge="False" />
+   <property name="unhide_subtypes" type="lines" purge="False" />
+ </object>
 </object>

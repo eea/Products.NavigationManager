@@ -24,7 +24,7 @@
   <adapter for="*
                 .interfaces.INavigationManagerRequest"
             factory=".navigation.DefaultPageIsNormalPage"
-            provides="Products.CMFPlone.browser.interfaces.IDefaultPage"
+            provides="plone.app.layout.navigation.interfaces.IDefaultPage"
             name="default_page" />
 
   <browser:page
@@ -38,7 +38,7 @@
   <browser:page
       for=".interfaces.INavigationItem"
       name="plone"
-      class=".plone.NavigationRootPlone"
+      class=".ploneview.NavigationRootPlone"
       permission="zope.Public"
       allowed_interface="Products.CMFPlone.browser.interfaces.IPlone"
       />

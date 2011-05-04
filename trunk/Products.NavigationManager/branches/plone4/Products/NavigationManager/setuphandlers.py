@@ -1,5 +1,4 @@
 from Products.CMFCore.utils import getToolByName
-#from Products.NavigationManager.catalog import reindexTree
 
 def setupVarious(context):
     # only run this step if we are in NavigationManager profile

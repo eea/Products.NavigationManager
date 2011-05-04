@@ -96,8 +96,3 @@ class NavigationItem(ATFolder):
         selected = subItemSelected or self.getId() == tabselected or \
                 tabselected == 'default' and myUrl == url
         return result, selected
-
-def register():
-    """ Register custom type
-    """
-    atapi.registerType(NavigationItem, PROJECTNAME)

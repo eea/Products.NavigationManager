@@ -4,22 +4,12 @@ from persistent.dict import PersistentDict
 from zope.event import notify
 from zope.interface import Interface, Attribute, implements
 from zope.component import adapts
-from zope.component.exceptions import ComponentLookupError
+from zope.component.interfaces import ComponentLookupError
 from zope.annotation.interfaces import IAnnotations
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 from zope.schema.vocabulary import SimpleTerm
 from plone.indexer import indexer
-
-import logging
-logger = logging.getLogger("Products.NavigationManager.sections")
-
-ITranslatable = None
-try:
-    from Products.LinguaPlone.interfaces import ITranslatable
-except ImportError, err:
-    logger.info(err)
-
-
+from Products.PloneLanguageTool.interfaces import ITranslatable
 
 KEY = "NavigationManager"
 
@@ -47,27 +37,26 @@ class NavigationSectionPosition(object):
             mapping = annotations[KEY] = PersistentDict(section)
         self.mapping = mapping
 
-    #def section():
-    def gets(self):
+    @property
+    def section(self):
         anno = IAnnotations(self.context)
         mapping = anno.get(KEY)
         return mapping['section']
-    def sets(self, value):
+
+    @section.setter
+    def section(self, value):
         anno = IAnnotations(self.context)
         mapping = anno.get(KEY)
         mapping['section'] = value
         info = Attributes(INavigationSectionPosition, 'section')
         notify(ObjectModifiedEvent(self.context, info))
-    #return property(get, set)
-    section = property(gets, sets)
-
 
 class NavigationSections(object):
     implements(INavigationSections)
     adapts(Interface)
 
     def __init__(self, context):
-        if ITranslatable is not None and ITranslatable.providedBy(context):
+        if ITranslatable.providedBy(context):
             self.context = context.getCanonical()
         else:
             self.context = context
@@ -96,7 +85,7 @@ class NavigationSections(object):
 
 
 @indexer(Interface)
-def getNavSectionsForIndex(obj, portal, **kwargs):
+def getNavSectionsForIndex(obj, **kwargs):
     try:
         nav = INavigationSectionPosition(obj)
         return nav.section

@@ -2,13 +2,14 @@
            xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:five="http://namespaces.zope.org/five">
 
-  <browser:page
-      for="*"
-      name="navigation_view"
-      class=".browser.navigation.NavigationManagerPortlet"
-      permission="zope.Public"
-      allowed_interface=".browser.navigation.INavigationPortlet"
-      />
+  <!-- XXX -->
+  <!--<browser:page-->
+      <!--for="*"-->
+      <!--name="navigation_view"-->
+      <!--class=".browser.navigation.NavigationManagerPortlet"-->
+      <!--permission="zope.Public"-->
+      <!--allowed_interface=".browser.navigation.INavigationPortlet"-->
+      <!--/>-->
 
   <browser:page
       for="*"
