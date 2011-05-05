@@ -20,5 +20,7 @@ class NavigationRootPlone(Plone):
     implements(IPlone)
 
     def navigationRootUrl(self):
+        """ Root URL
+        """
         ntool = getToolByName(self.context, 'portal_navigationmanager')
         return utils.parent(ntool).getUrl()

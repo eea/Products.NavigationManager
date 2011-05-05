@@ -8,6 +8,8 @@ class TestCatalog(NavigationManagerTestCase):
     """ Test-cases for class(es) relations. """
 
     def afterSetUp(self):
+        """ Setup
+        """
         setSite(self.portal)
         self.setRoles('Manager')
         wf = self.workflow = self.portal.portal_workflow
@@ -26,7 +28,8 @@ class TestCatalog(NavigationManagerTestCase):
         #default page
         self.pubrootnonfolder.invokeFactory('Folder', id='pubtest_fld')
         self.pubrootnonfolder.invokeFactory('Document', id='pubtest_doc')
-        setattr(self.pubrootnonfolder.pubtest_fld, 'default_page', 'pubtest_doc')
+        setattr(self.pubrootnonfolder.pubtest_fld,
+                'default_page', 'pubtest_doc')
 
         self.folder.invokeFactory('Folder', id='deep')
         self.deep = self.folder.deep
@@ -57,14 +60,20 @@ class TestCatalog(NavigationManagerTestCase):
         wf.doActionFor(self.topicroot.topicer, 'publish')
 
     def testAllPublishedFolders(self):
+        """ Folders published
+        """
         brains = self.catalog.searchResults(getId='pubrootonlyfolders')
         self.assertEquals(brains[0].is_empty, True)
 
     def testAllPublishedNonFolder(self):
+        """ Not folders published
+        """
         brains = self.catalog.searchResults(getId='pubrootnonfolder')
         self.assertEquals(brains[0].is_empty, False)
 
     def testDeep(self):
+        """ Deep test
+        """
         brains = self.catalog.searchResults(getId='deep')
         self.assertEquals(brains[0].is_empty, True)
 
@@ -79,12 +88,17 @@ class TestCatalog(NavigationManagerTestCase):
         self.assertEquals(brains[0].is_empty, False)
 
     def testTopic(self):
+        """ Topic
+        """
         brains = self.catalog.searchResults(getId='topicroot')
         self.assertEquals(brains[0].is_empty, False)
 
     def testDefaultPage(self):
+        """ Default page
+        """
         brains = self.catalog.searchResults(getId='pubtest_fld')
-        self.assertEquals(self.pubrootnonfolder.pubtest_fld.default_page, 'pubtest_doc')
+        self.assertEquals(
+            self.pubrootnonfolder.pubtest_fld.default_page, 'pubtest_doc')
         self.assertEquals(brains[0].is_empty, True)
 
 def test_suite():

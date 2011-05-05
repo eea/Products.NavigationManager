@@ -3,7 +3,6 @@
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content.folder import ATFolder
 from Products.CMFCore.utils import getToolByName
-from Products.NavigationManager.config import PROJECTNAME
 
 schema = atapi.Schema((
     atapi.StringField(

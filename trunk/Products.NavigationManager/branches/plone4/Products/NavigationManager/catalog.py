@@ -1,19 +1,18 @@
+""" Catalog indexes
+"""
 import logging
 from zope.interface import Interface
 from zope.component import queryUtility
 from plone.indexer import indexer
-from Acquisition import aq_parent, aq_inner
-from OFS.Application import Application
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.Portal import PloneSite
 from Products.CMFPlone.utils import base_hasattr, safe_callable
 
 try:
-    from p4a.subtyper.interfaces import ISubtyper
+    from p4a.subtyper import interfaces as p4aifaces
+    ISubtyper = p4aifaces.ISubtyper
 except ImportError:
     class ISubtyper(Interface):
-        """ ISubtyper
-        """
+        """ ISubtyper """
 
 logger = logging.getLogger("Products.NavigationManager.catalog")
 
@@ -52,8 +51,9 @@ def indexObject(obj):
             logger.info(err)
 
 def indexChildrenIfNotIndexed(obj, catalog):
-    # check if there are objects that are not yet indexed
-    # this should only happen when we do catalog update/rebuild in zmi
+    """ Check if there are objects that are not yet indexed.
+        This should only happen when we do catalog update/rebuild in ZMI
+    """
     for child in obj.objectValues():
         path = '/'.join(child.getPhysicalPath())
         if catalog.getrid(path) is None:
@@ -62,6 +62,8 @@ def indexChildrenIfNotIndexed(obj, catalog):
 
 @indexer(Interface)
 def getEmptyForIndex(obj, **kwargs):
+    """ is_empty index
+    """
     can_be_empty = canBeEmpty(obj)
 
     if not can_be_empty:

@@ -2,11 +2,9 @@
 """
 from Products.PloneTestCase import PloneTestCase
 
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.PloneTestCase.layer import onsetup
 from Products.Five import zcml
 from Products.Five import fiveconfigure
-from Products.GenericSetup import EXTENSION, profile_registry
 
 PloneTestCase.installProduct('NavigationManager')
 

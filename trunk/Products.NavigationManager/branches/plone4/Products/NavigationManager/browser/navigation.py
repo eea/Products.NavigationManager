@@ -1,10 +1,15 @@
+""" Navigation
+"""
 from zope.interface import implements, directlyProvides, providedBy
 from zope.component import getMultiAdapter
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
+from Products.Five.browser import BrowserView
 
+from plone.app.layout.navigation.defaultpage import DefaultPage
+from plone.app.layout.navigation.navtree import buildFolderTree
 from plone.app.layout.navigation.root import getNavigationRoot
 from plone.app.layout.navigation.interfaces import (
     INavtreeStrategy,
@@ -13,26 +18,35 @@ from plone.app.layout.navigation.interfaces import (
     IDefaultPage
 )
 
-from Products.CMFPlone.browser.interfaces import INavigationPortlet
-from plone.app.layout.navigation.navtree import buildFolderTree
-from Products.CMFPlone.browser.navtree import DefaultNavtreeStrategy, NavtreeQueryBuilder
-from plone.app.layout.navigation.defaultpage import DefaultPage
-from Products.PloneLanguageTool.interfaces import ITranslatable
-from Products.NavigationManager.browser.interfaces import INavigationManagerRequest
-from Products.NavigationManager.browser.interfaces import INavigationManagerTree
+#TODO: Plone4
+#from Products.CMFPlone.browser.interfaces import INavigationPortlet
+from Products.CMFPlone.browser.navtree import (
+    DefaultNavtreeStrategy,
+    NavtreeQueryBuilder,
+)
+
 from Products.NavigationManager.browser.buildtopictree import buildTopicTree
-from Products.Five.browser import BrowserView
+from Products.PloneLanguageTool.interfaces import ITranslatable
+from Products.NavigationManager.browser.interfaces import (
+    INavigationManagerRequest,
+    INavigationManagerTree,
+)
 
 def getApplicationRoot(obj):
+    """ Application Root
+    """
     portal_url = getToolByName(obj, 'portal_url')
     portal = portal_url.getPortalObject()
 
-    while not INavigationRoot.providedBy(obj) and aq_base(obj) is not aq_base(portal):
+    while not INavigationRoot.providedBy(obj) and (
+        aq_base(obj) is not aq_base(portal)):
         obj = utils.parent(obj)
 
     return obj
 
 def getMenu(context):
+    """ Get Menu
+    """
     menuid = getattr(context, 'navigationmanager_menuid', None)
     submenu = getattr(context, 'navigationmanager_submenu', None)
     if menuid is None or submenu == 'plone navigation':
@@ -44,8 +58,8 @@ def getMenu(context):
         query['id'] = menuid
     else:
         query['getUrl'] = context.absolute_url()
-    if ITranslatable.isImplementedBy(context) and context.Language() is not None \
-            and len(context.Language()) > 0:
+    if (ITranslatable.isImplementedBy(context) and
+        context.Language() is not None and len(context.Language())) > 0:
         query['Language'] = context.Language()
     menuItems = catalog.searchResults( query )
 
@@ -60,6 +74,8 @@ def getMenu(context):
     return None
 
 def getCurrentItem(tree):
+    """ Get current item
+    """
     for child in tree['children']:
         if child['currentParent']:
             return getCurrentItem(child)
@@ -67,7 +83,8 @@ def getCurrentItem(tree):
             return child, tree
 
 def removeEmptyFolders(tree):
-    # remove all empty folders on the first level in the tree
+    """ Remove all empty folders on the first level in the tree
+    """
     new_children = []
     for child in tree['children']:
         is_empty = getattr(child['item'], 'is_empty', False)
@@ -79,9 +96,6 @@ def removeEmptyFolders(tree):
     for child in tree['children']:
         removeEmptyFolders(child)
 
-#from Products.CMFCore.permissions import View
-#from AccessControl import ClassSecurityInfo
-
 class ListAllNode:
     """ This is an object that pretends to be a brain. """
 
@@ -91,18 +105,28 @@ class ListAllNode:
     getUrl = 'atct_topic_full_view'
 
     def getPath(self):
+        """ Path
+        """
         return 'dd'
 
     def getURL(self):
+        """ URL
+        """
         return 'atct_topic_full_view'
 
     def getRemoteUrl(self):
+        """ Remote URL
+        """
         return None
 
     def Creator(self):
+        """ Creator
+        """
         return ''
 
     def Description(self):
+        """ Description
+        """
         return ''
 
 class NavigationManagerTree(BrowserView):
@@ -112,10 +136,14 @@ class NavigationManagerTree(BrowserView):
     implements(INavigationManagerTree)
 
     def navigationTreeRootPath(self):
+        """ Tree root path
+        """
         context = utils.context(self)
         return '/'.join(getApplicationRoot(context).getPhysicalPath())
 
     def navigationTree(self):
+        """ Tree
+        """
         mContext = context = utils.context(self)
         menu = getMenu(context)
         strategy = None
@@ -123,8 +151,6 @@ class NavigationManagerTree(BrowserView):
         isAnon = getToolByName(context, 'portal_membership').isAnonymousUser()
 
         if menu and isAnon:
-            # we only use NavigationManager if we are anonymous
-            #menuTree = getMultiAdapter((context, self.request), name="eea_menu")
             mContext = menu
             queryBuilder = NavtreeManagerQueryBuilder(mContext)
 
@@ -149,12 +175,15 @@ class NavigationManagerTree(BrowserView):
 
         strategy = getMultiAdapter((mContext, self), INavtreeStrategy)
         reqInterfaces = providedBy(context.REQUEST)
-        directlyProvides(context.REQUEST, reqInterfaces + INavigationManagerRequest)
-        tree = buildFolderTree(mContext, obj=mContext, query=query, strategy=strategy)
+        directlyProvides(context.REQUEST,
+                         reqInterfaces + INavigationManagerRequest)
+        tree = buildFolderTree(mContext,
+                               obj=mContext, query=query, strategy=strategy)
         props = getToolByName(context, 'portal_properties')
         navtree_props = getattr(props, 'navtree_properties', None)
         if navtree_props is not None:
-            topic_enabled = navtree_props.getProperty('topicListingInNavtree', False)
+            topic_enabled = navtree_props.getProperty(
+                'topicListingInNavtree', False)
         else:
             topic_enabled = False
 
@@ -166,7 +195,8 @@ class NavigationManagerTree(BrowserView):
 
         if mContext.portal_type.endswith('Topic') and topic_enabled and \
                 not temporary:
-            topictree = buildTopicTree(mContext, obj=mContext, strategy=strategy)
+            topictree = buildTopicTree(mContext,
+                                       obj=mContext, strategy=strategy)
 
             current, parent = getCurrentItem(tree)
             topiccurrent, _topicparent = getCurrentItem(topictree)
@@ -194,8 +224,13 @@ class NavigationManagerTree(BrowserView):
                 m['getURL'] = m['item']['getUrl']
             selectedMenuId = getattr(context, 'navigationmanager_menuid', None)
             currentContext = m['getURL'] == context.absolute_url()
-            currentMenuItem = selectedMenuId and m['item']['getId'] == selectedMenuId
-            m['currentItem'] = currentContext or currentMenuItem or m['currentItem'] and not m['currentParent']
+
+            currentMenuItem = (selectedMenuId and
+                               m['item']['getId'] == selectedMenuId)
+
+            m['currentItem'] = (currentContext or currentMenuItem
+                                or m['currentItem'] and not m['currentParent'])
+
             if m['currentParent']:
                 for child in m['children']:
                     if child['defaultPage']:
@@ -203,6 +238,7 @@ class NavigationManagerTree(BrowserView):
                         m['children'].pop(idx)
                         m['children'].insert(0, child)
                         break
+
             if m.get('defaultPage', False):
                 idx = tree['children'].index(m)
                 tree['children'].pop(idx)
@@ -213,9 +249,10 @@ class NavigationManagerTree(BrowserView):
             removeEmptyFolders(tree)
         return tree
 
-#TODO Fix me
+#TODO: Plone4  Fix me
 #class NavigationManagerPortlet(NavigationPortlet):
-    #""" EEA website navigation portlet fetches menu from navigation manager. """
+    #""" EEA website navigation portlet fetches menu from navigation manager.
+    #"""
 
     #implements(INavigationPortlet)
 
@@ -249,9 +286,13 @@ class NavtreeManagerStrategy(DefaultNavtreeStrategy):
         self.showAllParents = False
 
 class NavtreeSectionStrategy(DefaultNavtreeStrategy):
-    """ The navtree strategy that provides navigation section info for each node. """
+    """ The navtree strategy that provides navigation
+        section info for each node.
+    """
 
     def decoratorFactory(self, node):
+        """ Decorator factory
+        """
         newNode = DefaultNavtreeStrategy.decoratorFactory(self, node)
         item = node['item']
         newNode['navSection'] = getattr(item, 'navSection', None) or 'default'
@@ -262,11 +303,7 @@ class TopicNavtreeStrategy(NavtreeSectionStrategy):
     """ The navtree strategy for topics. """
 
     def __init__(self, context, view=None):
-        NavtreeSectionStrategy.__init__(self, context, view)
-        #portal_url = getToolByName(context, 'portal_url')
-        #portal = portal_url.getPortalObject()
-        #self.rootPath = '/'.join(context.getPhysicalPath())
-        #self.rootPath = '/'.join(portal.getPhysicalPath())
+        super(TopicNavtreeStrategy, self).__init__(self, context, view)
         if view is not None:
             self.rootPath = view.navigationTreeRootPath()
         else:
@@ -275,10 +312,10 @@ class TopicNavtreeStrategy(NavtreeSectionStrategy):
 
 
     def decoratorFactory(self, node):
+        """ Decorator factory
+        """
         newNode = NavtreeSectionStrategy.decoratorFactory(self, node)
-        #context = utils.context(self)
         item = node['item']
-        #newNode['path'] = context.absolute_url() + '/' + item.getId
         newNode['defaultPage'] = getattr(item, 'is_default_page', False)
         return newNode
 
@@ -323,7 +360,8 @@ class NavtreeManagerQueryBuilder:
 
         # Filter on workflow states, if enabled
         if navtree_properties.getProperty('enable_wf_state_filtering', False):
-            query['review_state'] = navtree_properties.getProperty('wf_states_to_show', ())
+            query['review_state'] = navtree_properties.getProperty(
+                'wf_states_to_show', ())
 
         self.query = query
 
@@ -332,7 +370,8 @@ class NavtreeManagerQueryBuilder:
 
 
 class NavtreeManagerQueryBuilderForSections(NavtreeQueryBuilder):
-
+    """ Navtree manager query builder for sections
+    """
     def __init__(self, context):
         NavtreeQueryBuilder.__init__(self, context)
         if self.query.get('depth', None) is not None:
@@ -346,5 +385,7 @@ class DefaultPageIsNormalPage(DefaultPage):
     implements(IDefaultPage)
 
     def isDefaultPage(self, obj, context_=None):
-        return DefaultPage.isDefaultPage(self, obj, context_) and obj.exclude_from_nav() or False
-
+        """ Default page?
+        """
+        return DefaultPage.isDefaultPage(self,
+                            obj, context_) and obj.exclude_from_nav() or False

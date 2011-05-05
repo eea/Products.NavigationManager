@@ -1,13 +1,21 @@
+""" Sections
+"""
+from zope.event import notify
 from zope.interface import implements
 from zope.component import queryAdapter
-#from zope.formlib.form import Fields, EditForm
-from Products.NavigationManager.sections import INavigationSectionPosition, INavigationSections
+from zope.lifecycleevent import ObjectModifiedEvent, Attributes
+
+from Products.NavigationManager.sections import (
+    INavigationSectionPosition,
+    INavigationSections,
+)
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from Acquisition import aq_base
-from interfaces import IContentNavigationSectionMenu
-from zope.lifecycleevent import ObjectModifiedEvent, Attributes
-from zope.event import notify
+from Products.NavigationManager.browser.interfaces import (
+    IContentNavigationSectionMenu,
+)
+
 
 class SetNavigationSection(BrowserView):
     """ sets navigation section for current object. """
@@ -41,6 +49,8 @@ class SectionsForContentNavigationMenu(BrowserView):
         self.request = request
 
     def display(self):
+        """ Display
+        """
         if self.navContext is None:
             return False
         mship = getToolByName(self.context, 'portal_membership')
@@ -48,6 +58,8 @@ class SectionsForContentNavigationMenu(BrowserView):
 
     @property
     def menu(self):
+        """ Menu
+        """
         navContext = self.navContext
         if not self.display():
             return []
@@ -102,9 +114,11 @@ class LeftNavigationSectionPortlet(BrowserView):
         sections = INavigationSections(context)
         rendered = ''
         for section in sections.left:
-            template = context.unrestrictedTraverse('portlet_navigation_sections')
-            rendered += template(section=section.value, sectionTitle=section.title)
+            template = context.unrestrictedTraverse(
+                'portlet_navigation_sections')
 
+            rendered += template(
+                section=section.value, sectionTitle=section.title)
         return rendered
 
 
@@ -116,12 +130,9 @@ class RightNavigationSectionPortlet(BrowserView):
         sections = INavigationSections(context)
         rendered = ''
         for section in sections.right:
-            template = context.unrestrictedTraverse('portlet_navigation_sections')
-            rendered += template(section=section.value, sectionTitle=section.title)
+            template = context.unrestrictedTraverse(
+                'portlet_navigation_sections')
 
+            rendered += template(
+                section=section.value, sectionTitle=section.title)
         return rendered
-
-
-
-
-

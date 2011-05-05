@@ -9,6 +9,8 @@ class TestMenu(NavigationManagerTestCase):
     """ Test-cases for class(es) relations. """
 
     def afterSetUp(self):
+        """ Setup
+        """
         setSite(self.portal)
         self.setRoles('Manager')
 
@@ -23,9 +25,13 @@ class TestMenu(NavigationManagerTestCase):
         wf.doActionFor(self.pubrootonlyfolders['pubtest1-2'], 'publish')
 
     def testDefaultNavigationManagerPath(self):
-        m = menu.Menu(self.pubrootonlyfolders['pubtest1-2'], self.portal.REQUEST)
+        """ Test default navigation manager
+        """
+        m = menu.Menu(self.pubrootonlyfolders['pubtest1-2'],
+                      self.portal.REQUEST)
         path = [ folder['id'] for folder in m.getPath()]
-        self.assertEquals(path, ['Members', 'test_user_1_', 'pubrootonlyfolders'])
+        self.assertEquals(path, ['Members', 'test_user_1_',
+                                 'pubrootonlyfolders'])
 
 
 def test_suite():

@@ -18,13 +18,19 @@ class INavigationSectionPositionable(Interface):
         navigation sections. """
 
 class INavigationSectionPosition(Interface):
+    """ Marker interface for objects that are positioned in navigation sections
+    """
     section = Attribute(u"Navigation section")
 
 class INavigationSections(Interface):
+    """ Navigation Sections
+    """
     left = Attribute(u"Left navigation sections")
     right = Attribute(u"Right navigation sections")
 
 class NavigationSectionPosition(object):
+    """ Navigation section position
+    """
     implements(INavigationSectionPosition)
     adapts(INavigationSectionPositionable)
 
@@ -39,12 +45,16 @@ class NavigationSectionPosition(object):
 
     @property
     def section(self):
+        """ Getter
+        """
         anno = IAnnotations(self.context)
         mapping = anno.get(KEY)
         return mapping['section']
 
     @section.setter
     def section(self, value):
+        """ Setter
+        """
         anno = IAnnotations(self.context)
         mapping = anno.get(KEY)
         mapping['section'] = value
@@ -52,6 +62,8 @@ class NavigationSectionPosition(object):
         notify(ObjectModifiedEvent(self.context, info))
 
 class NavigationSections(object):
+    """ Navigation sections
+    """
     implements(INavigationSections)
     adapts(Interface)
 
@@ -62,6 +74,8 @@ class NavigationSections(object):
             self.context = context
 
     def _createSectionList(self, sectionLines):
+        """ Create section list
+        """
         sections = []
         if sectionLines:
             for section in sectionLines:
@@ -75,17 +89,25 @@ class NavigationSections(object):
 
     @property
     def left(self):
-        leftSections = self._createSectionList( getattr(self.context, 'navigation_sections_left', []))
+        """ Left sections
+        """
+        leftSections = self._createSectionList(
+            getattr(self.context, 'navigation_sections_left', []))
         return leftSections
 
     @property
     def right(self):
-        rightSections = self._createSectionList( getattr(self.context, 'navigation_sections_right', []))
+        """ Right sections
+        """
+        rightSections = self._createSectionList(
+            getattr(self.context, 'navigation_sections_right', []))
         return rightSections
 
 
 @indexer(Interface)
 def getNavSectionsForIndex(obj, **kwargs):
+    """ Get navigation section for index
+    """
     try:
         nav = INavigationSectionPosition(obj)
         return nav.section
@@ -93,8 +115,9 @@ def getNavSectionsForIndex(obj, **kwargs):
         raise AttributeError
 
 def objectNavigationSet(obj, event):
-    """ Checks if the object's navigations ection are modified. If true, catalog
-        is updated. """
+    """ Checks if the object's navigations section are modified.
+    If true, catalog is updated.
+    """
 
     for desc in event.descriptions:
         if desc.interface == INavigationSectionPosition:

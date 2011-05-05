@@ -1,19 +1,19 @@
 """ Init
 """
 from Products.CMFCore import utils as cmfutils
-from Products.CMFPlone.utils import ToolInit
 
 from Products.Archetypes import atapi
 from Products.NavigationManager.config import PROJECTNAME
 from Products.NavigationManager import NavigationItem
 from Products.NavigationManager import NavigationManager
 
-atapi.registerType(NavigationManager.NavigationManager, PROJECTNAME)
-atapi.registerType(NavigationItem.NavigationItem, PROJECTNAME)
-
 def initialize(context):
     """ Zope 2
     """
+    # Register AT Content-Types
+    atapi.registerType(NavigationManager.NavigationManager, PROJECTNAME)
+    atapi.registerType(NavigationItem.NavigationItem, PROJECTNAME)
+
     # Register custom content-types
     content_types, constructors, ftis = atapi.process_types(
         atapi.listTypes(PROJECTNAME),

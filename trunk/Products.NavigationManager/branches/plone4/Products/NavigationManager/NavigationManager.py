@@ -1,19 +1,15 @@
 """ Tool
 """
-from Products.Archetypes.public import BaseFolder, BaseFolderSchema
-from Products.NavigationManager.config import PROJECTNAME
-
-# additional imports from tagged value 'import'
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.utils import UniqueObject
-from plone.memoize.ram import cache, global_cache
-
-from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as _
+from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
+from Products.Archetypes.public import BaseFolder, BaseFolderSchema
+from Products.statusmessages.interfaces import IStatusMessage
+
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
-from Products.CMFDynamicViewFTI.interfaces import ISelectableBrowserDefault
-from Products.statusmessages.interfaces import IStatusMessage
+from plone.memoize.ram import cache, global_cache
 
 def cacheKeyGetTree(method, self, site, tabselected='default'):
     """ Cache key
@@ -39,6 +35,9 @@ class NavigationManager(UniqueObject, BaseFolder):
     immediate_view = 'base_view'
     default_view = 'base_view'
     schema = BaseFolderSchema.copy()
+
+    def __init__(self, oid='portal_navigationmanager'):
+        super(NavigationManager, self).__init__(oid=oid)
 
     # Methods
     def selectViewTemplate(self, context, templateId):
