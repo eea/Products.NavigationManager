@@ -12,12 +12,8 @@
     <implements interface=".browser.interfaces.INavigationItem" />
   </class>
 
-  <class class="Products.ATContentTypes.content.folder.ATFolder">
-    <implements interface=".sections.INavigationSectionPositionable" />
-  </class>
-
-  <class class="Products.ATContentTypes.content.document.ATDocument">
-    <implements interface=".sections.INavigationSectionPositionable" />
+  <class class="Products.Archetypes.BaseObject.BaseObject">
+    <implements interface="Products.NavigationManager.sections.INavigationSectionPositionable" />
   </class>
 
   <adapter factory=".sections.NavigationSectionPosition" />
