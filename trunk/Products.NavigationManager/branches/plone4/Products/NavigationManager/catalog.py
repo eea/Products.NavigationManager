@@ -2,17 +2,9 @@
 """
 import logging
 from zope.interface import Interface
-from zope.component import queryUtility
 from plone.indexer import indexer
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import base_hasattr, safe_callable
-
-try:
-    from p4a.subtyper import interfaces as p4aifaces
-    ISubtyper = p4aifaces.ISubtyper
-except ImportError:
-    class ISubtyper(Interface):
-        """ ISubtyper """
 
 logger = logging.getLogger("Products.NavigationManager.catalog")
 
@@ -22,20 +14,9 @@ def canBeEmpty(obj):
         they can not be empty either. """
 
     props = getToolByName(obj, 'portal_properties')
-    site_props = getattr(props, 'site_properties')
-    hide_if_empty = getattr(site_props, 'hide_if_empty', ())
-    hidden = obj.portal_type in hide_if_empty
-
-    # Handle subtyped objects
-    subtyper = queryUtility(ISubtyper)
-    if not subtyper:
-        return hidden
-
-    unhide_subtypes = getattr(site_props, 'unhide_subtypes', ())
-    etype = subtyper.existing_type(obj)
-    type_name = etype and etype.name or ""
-
-    return hidden and (type_name not in unhide_subtypes)
+    nav_props = getattr(props, 'navtree_properties')
+    hide_if_empty = getattr(nav_props, 'hide_if_empty', ())
+    return getattr(obj, 'portal_type', '') in hide_if_empty
 
 def indexObject(obj):
     """ Adds an object to the catalog if it's not already there.

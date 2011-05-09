@@ -34,4 +34,7 @@
   <adapter factory=".sections.getNavSectionsForIndex" name="navSection" />
   <adapter factory=".catalog.getEmptyForIndex" name="is_empty" />
 
+  <!-- Upgrades -->
+  <include package=".upgrades" />
+
 </configure>

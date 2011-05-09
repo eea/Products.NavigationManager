@@ -15,13 +15,11 @@ def setup_navigationmanager():
     fiveconfigure.debug_mode = True
     from Products import NavigationManager
     zcml.load_config('configure.zcml', NavigationManager)
-    zcml.load_config('testing.zcml', NavigationManager.tests)
     fiveconfigure.debug_mode = False
 
 setup_navigationmanager()
 PloneTestCase.setupPloneSite(extension_profiles = [
     'Products.NavigationManager:default',
-    'Products.NavigationManager.tests:testfixture'
 ])
 
 class NavigationManagerTestCase(PloneTestCase.PloneTestCase):

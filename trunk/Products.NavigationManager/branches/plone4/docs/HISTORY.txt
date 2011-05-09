@@ -5,7 +5,7 @@ Changelog
 4.0-dev - (unreleased)
 ----------------------
  * Cleanup: pylint, pyflakes violations [voineali #4285]
-
+ * Feature: Plone 4.0.4 compatible release [voineali #4285]
 
 0.3-dev - (unreleased)
 ----------------------

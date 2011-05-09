@@ -1,0 +1,23 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+  i18n_domain="eea">
+
+  <genericsetup:upgradeSteps
+    source="*"
+    destination="4.0"
+    profile="Products.NavigationManager:default">
+
+    <genericsetup:upgradeStep
+      title="Upgrade Products.NavigationManager"
+      handler="Products.NavigationManager.upgrades.evolve4.evolve"
+      />
+
+    <genericsetup:upgradeDepends
+      title="Upgrade to version 4.0"
+      import_steps="catalog controlpanel propertiestool skins toolset"
+      />
+
+  </genericsetup:upgradeSteps>
+
+</configure>
