@@ -18,12 +18,12 @@ class INavigationSectionPositionable(Interface):
         navigation sections. """
 
 class INavigationSectionPosition(Interface):
-    """ Marker interface for objects that are positioned in navigation sections
+    """ Navigation Section adapters
     """
     section = Attribute(u"Navigation section")
 
 class INavigationSections(Interface):
-    """ Navigation Sections
+    """ Navigation Sections adapters
     """
     left = Attribute(u"Left navigation sections")
     right = Attribute(u"Right navigation sections")

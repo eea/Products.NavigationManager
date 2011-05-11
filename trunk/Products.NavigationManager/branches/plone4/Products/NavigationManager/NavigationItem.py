@@ -22,16 +22,6 @@ class NavigationItem(ATFolder):
     """ Navigation Item
     """
     meta_type = archetype_name = portal_type = 'NavigationItem'
-
-    allowed_content_types = ['NavigationItem'] + list(
-        getattr(ATFolder, 'allowed_content_types', []))
-
-    filter_content_types = 1
-    global_allow = 0
-    allow_discussion = False
-    immediate_view = 'base_view'
-    default_view = 'base_view'
-
     schema = NavigationItem_schema
 
     def getTree(self, local = False, tabselected='default', language = None):
@@ -56,14 +46,11 @@ class NavigationItem(ATFolder):
 
             children, selected = n.getTree(local, tabselected, language)
 
-            fallback = False
-            fallbackLanguage = ''
             if language is not None:
-                translation = n.getTranslation(language)
-                if translation is None:
-                    fallback = True
-                    fallbackLanguage = n.Language()
-                else:
+                translation = (n.getTranslation(language)
+                               if hasattr(n, 'getTranslation') else None)
+
+                if translation:
                     if wftool.getInfoFor(translation,
                                          'review_state') != 'published':
                         # we have a translation but it's not published
@@ -71,19 +58,21 @@ class NavigationItem(ATFolder):
                         continue
                     n = translation
 
-
             result.append({'item': { 'title': n.Title(),
                                      'id' : n.getId(),
                                      'description' : n.Description(),
                                      'url' : n.getUrl() },
                            'children': children,
                            'selected': selected,
-                           'fallback': fallback,
-                           'fallbackLanguage': fallbackLanguage })
+                           })
+
             if selected:
                 subItemSelected = True
+
         # Top menu selected if a subitem is selected
-        translation = self.getTranslation(language)
+        translation = (self.getTranslation(language)
+                       if hasattr(self, 'getTranslation') else None)
+
         if language is not None and translation is not None:
             myUrl = self.getTranslation(language).getUrl()
         else:

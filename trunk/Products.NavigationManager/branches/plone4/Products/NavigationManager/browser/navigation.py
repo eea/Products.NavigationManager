@@ -20,6 +20,7 @@ from plone.app.layout.navigation.interfaces import (
 
 #TODO: Plone4
 #from Products.CMFPlone.browser.interfaces import INavigationPortlet
+from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
 from Products.CMFPlone.browser.navtree import (
     DefaultNavtreeStrategy,
     NavtreeQueryBuilder,
@@ -389,3 +390,34 @@ class DefaultPageIsNormalPage(DefaultPage):
         """
         return DefaultPage.isDefaultPage(self,
                             obj, context_) and obj.exclude_from_nav() or False
+
+#
+# Override plone default behaviour
+#
+class PortalNavigationTabs(CatalogNavigationTabs):
+    """ Portal Tabs
+    """
+    def topLevelTabs(self, actions=None, category='portal_tabs'):
+        """ Top level tabs
+        """
+        ntool = getToolByName(self.context, 'portal_navigationmanager', None)
+        if not ntool:
+            return super(PortalNavigationTabs, self).topLevelTabs(
+                actions, category)
+
+        site = getattr(self.context, 'navigationmanager_site', 'default')
+        tabselected = getattr(self.context, 'navigationmanager_menuid',
+                              'default')
+
+        result = []
+        for node in ntool.getTree(site, tabselected):
+            item = node.get('item', {})
+
+            data = {
+                'name': item.get('title', '<NOT SET>'),
+                'id': item.get('id', '_not_set_'),
+                'url': item.get('url', '#'),
+                'description': item.get('description', '<NOT SET>'),
+            }
+            result.append(data)
+        return result

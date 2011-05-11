@@ -9,31 +9,12 @@ from Products.statusmessages.interfaces import IStatusMessage
 
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
-from plone.memoize.ram import cache, global_cache
-
-def cacheKeyGetTree(method, self, site, tabselected='default'):
-    """ Cache key
-    """
-    request = self.REQUEST
-    if tabselected != 'default':
-        secondkey = tabselected
-    else:
-        secondkey = request.get('ACTUAL_URL').split('/')
-        if len(secondkey) > 5:
-            secondkey = secondkey[:5]
-    return (site, secondkey, request.get('LANGUAGE', 'en'))
 
 class NavigationManager(UniqueObject, BaseFolder):
     """ Navigation manager
     """
 
     meta_type = archetype_name = portal_type = 'NavigationManager'
-    allowed_content_types = ['NavigationItem']
-    filter_content_types = 1
-    global_allow = 0
-    allow_discussion = False
-    immediate_view = 'base_view'
-    default_view = 'base_view'
     schema = BaseFolderSchema.copy()
 
     def __init__(self, oid='portal_navigationmanager'):
@@ -87,7 +68,6 @@ class NavigationManager(UniqueObject, BaseFolder):
         IStatusMessage(context.REQUEST).addStatusMessage(msg, 'info')
         return 'success'
 
-    @cache(cacheKeyGetTree)
     def getTree(self, site, tabselected='default'):
         """
         It returns a list  of menu items objects from the root of this menu manager.
@@ -101,21 +81,18 @@ class NavigationManager(UniqueObject, BaseFolder):
             local = True
 
         fallback = getattr(self, 'navigationmanager_fallback', False)
-
-        tree = []
         node = getattr(self, site, None)
-        language = None
-        if node is not None:
-            if fallback:
-                language = request.get('LANGUAGE', None)
-                canonical = node.getCanonical()
-                if canonical is not None and canonical is not node:
-                    node = canonical
-            tree, _selected = node.getTree(local, tabselected, language)
-        return tree
+        if not node:
+            return
 
-def invalidateNavigationManagerTreeCache(obj, event):
-    """ Invalidate cache
-    """
-    global_cache.invalidate(
-        'Products.NavigationManager.NavigationManager.getTree')
+        language = None
+        if fallback:
+            language = request.get('LANGUAGE', None)
+            canonical = (node.getCanonical()
+                         if hasattr(node, 'getCanonical') else node)
+            if canonical and (canonical is not node):
+                node = canonical
+
+        tree, _selected = node.getTree(local, tabselected, language)
+        for node in tree:
+            yield node

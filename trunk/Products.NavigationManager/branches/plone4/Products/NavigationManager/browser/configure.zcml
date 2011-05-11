@@ -28,6 +28,14 @@
             name="default_page" />
 
   <browser:page
+      name="portal_tabs_view"
+      for="OFS.interfaces.IItem"
+      class=".navigation.PortalNavigationTabs"
+      permission="zope.Public"
+      allowed_attributes="topLevelTabs"
+      />
+
+  <browser:page
     for="*"
     name="eea_menu"
     class=".menu.Menu"
