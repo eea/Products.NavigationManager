@@ -2,37 +2,23 @@
 """
 from persistent.dict import PersistentDict
 from zope.event import notify
-from zope.interface import Interface, Attribute, implements
-from zope.component import adapts
-from zope.component.interfaces import ComponentLookupError
+from zope.interface import implements
 from zope.annotation.interfaces import IAnnotations
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
 from zope.schema.vocabulary import SimpleTerm
-from plone.indexer import indexer
 from Products.PloneLanguageTool.interfaces import ITranslatable
-
-KEY = "NavigationManager"
-
-class INavigationSectionPositionable(Interface):
-    """ Marker interface for content objects that can be positioned in
-        navigation sections. """
-
-class INavigationSectionPosition(Interface):
-    """ Navigation Section adapters
-    """
-    section = Attribute(u"Navigation section")
-
-class INavigationSections(Interface):
-    """ Navigation Sections adapters
-    """
-    left = Attribute(u"Left navigation sections")
-    right = Attribute(u"Right navigation sections")
+from Products.NavigationManager.config import PROJECTNAME as KEY
+from Products.NavigationManager.sections.interfaces import (
+    INavigationSectionPosition,
+    INavigationSections,
+)
 
 class NavigationSectionPosition(object):
-    """ Navigation section position
+    """ Addapter to set / get default navigation section within annotations
+
+    __annotations__['NavigationManager'] = {'section': None}
     """
     implements(INavigationSectionPosition)
-    adapts(INavigationSectionPositionable)
 
     def __init__(self, context):
         self.context = context
@@ -65,7 +51,6 @@ class NavigationSections(object):
     """ Navigation sections
     """
     implements(INavigationSections)
-    adapts(Interface)
 
     def __init__(self, context):
         if ITranslatable.providedBy(context):
@@ -102,23 +87,3 @@ class NavigationSections(object):
         rightSections = self._createSectionList(
             getattr(self.context, 'navigation_sections_right', []))
         return rightSections
-
-
-@indexer(Interface)
-def getNavSectionsForIndex(obj, **kwargs):
-    """ Get navigation section for index
-    """
-    try:
-        nav = INavigationSectionPosition(obj)
-        return nav.section
-    except (ComponentLookupError, TypeError, ValueError):
-        raise AttributeError
-
-def objectNavigationSet(obj, event):
-    """ Checks if the object's navigations section are modified.
-    If true, catalog is updated.
-    """
-    for desc in event.descriptions:
-        if desc.interface == INavigationSectionPosition:
-            obj.reindexObject()
-            break

@@ -2,9 +2,13 @@
 """
 import logging
 from zope.interface import Interface
+from zope.component.interfaces import ComponentLookupError
 from plone.indexer import indexer
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import base_hasattr, safe_callable
+from Products.NavigationManager.sections.interfaces import (
+    INavigationSectionPosition,
+)
 
 logger = logging.getLogger("Products.NavigationManager.catalog")
 
@@ -40,7 +44,9 @@ def indexChildrenIfNotIndexed(obj, catalog):
         if catalog.getrid(path) is None:
             # the object doesn't exist in catalog, so add it
             indexObject(child)
-
+#
+# New ZCatalog indexes
+#
 @indexer(Interface)
 def getEmptyForIndex(obj, **kwargs):
     """ is_empty index
@@ -104,3 +110,13 @@ def getEmptyForIndex(obj, **kwargs):
             return False
 
     return True
+
+@indexer(Interface)
+def getNavSectionsForIndex(obj, **kwargs):
+    """ Get navigation section for index
+    """
+    try:
+        nav = INavigationSectionPosition(obj)
+        return nav.section
+    except (ComponentLookupError, TypeError, ValueError):
+        raise AttributeError

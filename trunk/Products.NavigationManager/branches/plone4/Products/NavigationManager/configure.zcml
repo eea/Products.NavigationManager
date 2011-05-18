@@ -7,34 +7,12 @@
   <include file="profiles.zcml" />
 
   <include package=".browser" />
-
-  <class class="Products.NavigationManager.NavigationItem.NavigationItem">
-    <implements interface=".browser.interfaces.INavigationItem" />
-  </class>
-
-  <class class="Products.Archetypes.BaseObject.BaseObject">
-    <implements interface="Products.NavigationManager.sections.INavigationSectionPositionable" />
-  </class>
-
-  <adapter factory=".sections.NavigationSectionPosition" />
-  <adapter factory=".sections.NavigationSections" />
-
-  <subscriber
-    for="* zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-    handler=".sections.objectNavigationSet"
-    />
-
-  <adapter
-    for=".sections.INavigationSectionPositionable"
-    provides="zope.annotation.interfaces.IAnnotations"
-    factory="zope.annotation.attribute.AttributeAnnotations"
-    />
+  <include package=".menu" />
+  <include package=".sections" />
+  <include package=".upgrades" />
 
   <!-- Catalog indexers -->
-  <adapter factory=".sections.getNavSectionsForIndex" name="navSection" />
+  <adapter factory=".catalog.getNavSectionsForIndex" name="navSection" />
   <adapter factory=".catalog.getEmptyForIndex" name="is_empty" />
-
-  <!-- Upgrades -->
-  <include package=".upgrades" />
 
 </configure>

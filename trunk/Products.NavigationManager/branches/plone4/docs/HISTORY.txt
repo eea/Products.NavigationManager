@@ -4,8 +4,6 @@ Changelog
 
 4.0-dev - (unreleased)
 ----------------------
- * TODO: Remove skins/global_contentviews and add "navigation" Menu using browser:menu
-   directive (navman_navigation_sections).
  * TODO: Handle skins/portlet_menu;
  * TODO: Handle skins/nav_pathbar;
  * TODO: Handle portlet_app_navigation;
