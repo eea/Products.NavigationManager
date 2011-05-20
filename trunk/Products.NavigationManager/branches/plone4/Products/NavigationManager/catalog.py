@@ -2,10 +2,14 @@
 """
 import logging
 from zope.interface import Interface
+from zope.component import queryMultiAdapter
 from zope.component.interfaces import ComponentLookupError
 from plone.indexer import indexer
+from Products.statusmessages.interfaces import IStatusMessage
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import base_hasattr, safe_callable
+from Products.CMFPlone.utils import parent as getParent
+from Products.Five.browser import BrowserView
 from Products.NavigationManager.sections.interfaces import (
     INavigationSectionPosition,
 )
@@ -120,3 +124,27 @@ def getNavSectionsForIndex(obj, **kwargs):
         return nav.section
     except (ComponentLookupError, TypeError, ValueError):
         raise AttributeError
+
+class Reindex(BrowserView):
+    """ Reindex is_empty for context and all its parents
+    """
+    def __call__(self, redirect='', **kwargs):
+        if not redirect:
+            redirect = self.context.absolute_url()
+
+        self.context.reindexObject(idxs=['is_empty'])
+
+        parent = getParent(self.context)
+        if not parent:
+            IStatusMessage(self.request).addStatusMessage(
+                'Done reindexing is_empty', type='info')
+            return self.request.response.redirect(redirect)
+
+        reindex = queryMultiAdapter((parent, self.request),
+                                    name=u'reindexIsEmpty')
+        if not reindex:
+            IStatusMessage(self.request).addStatusMessage(
+                    'Done reindexing is_empty', type='info')
+            return self.request.response.redirect(redirect)
+
+        return reindex(redirect=redirect)

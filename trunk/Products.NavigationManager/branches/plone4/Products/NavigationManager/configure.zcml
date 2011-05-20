@@ -15,4 +15,11 @@
   <adapter factory=".catalog.getNavSectionsForIndex" name="navSection" />
   <adapter factory=".catalog.getEmptyForIndex" name="is_empty" />
 
+  <browser:page
+    for=".interfaces.INavigationSectionPositionable"
+    name="reindexIsEmpty"
+    class=".catalog.Reindex"
+    permission="cmf.ModifyPortalContent"
+    />
+
 </configure>

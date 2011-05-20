@@ -68,6 +68,7 @@ class TestCatalog(NavigationManagerTestCase):
     def testAllPublishedNonFolder(self):
         """ Not folders published
         """
+        self.pubrootnonfolder.restrictedTraverse('@@reindexIsEmpty')()
         brains = self.catalog.searchResults(getId='pubrootnonfolder')
         self.assertEquals(brains[0].is_empty, False)
 
@@ -80,16 +81,32 @@ class TestCatalog(NavigationManagerTestCase):
         # the top level folder 'deep' should be reindexed when a document
         # a few levels down is published
         self.workflow.doActionFor(self.deep.deep1.deep2.deep3, 'publish')
+        self.deep.deep1.deep2.restrictedTraverse('@@reindexIsEmpty')()
         brains = self.catalog.searchResults(getId='deep')
         self.assertEquals(brains[0].is_empty, True)
 
         self.workflow.doActionFor(self.deep.deep1.deep2, 'publish')
+        self.deep.deep1.deep2.restrictedTraverse('@@reindexIsEmpty')()
         brains = self.catalog.searchResults(getId='deep')
         self.assertEquals(brains[0].is_empty, False)
 
     def testTopic(self):
         """ Topic
         """
+        self.topicroot.topicer.restrictedTraverse('@@reindexIsEmpty')()
+        brains = self.catalog.searchResults(getId='topicer')
+        self.assertEquals(brains[0].is_empty, True)
+
+        brains = self.catalog.searchResults(getId='topicroot')
+        self.assertEquals(brains[0].is_empty, True)
+
+        # Add criterion
+        self.topicroot.topicer.addCriterion( 'foo', 'ATSimpleStringCriterion' )
+        self.topicroot.topicer.restrictedTraverse('@@reindexIsEmpty')()
+
+        brains = self.catalog.searchResults(getId='topicer')
+        self.assertEquals(brains[0].is_empty, False)
+
         brains = self.catalog.searchResults(getId='topicroot')
         self.assertEquals(brains[0].is_empty, False)
 
