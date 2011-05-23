@@ -29,6 +29,14 @@
     name="default_page" />
 
   <browser:page
+    for="OFS.interfaces.IItem"
+    name="breadcrumbs_view"
+    class=".breadcrumbs.Breadcrumbs"
+    permission="zope.Public"
+    allowed_attributes="breadcrumbs"
+    />
+
+  <browser:page
     name="portal_tabs_view"
     for="OFS.interfaces.IItem"
     class=".navigation.PortalNavigationTabs"

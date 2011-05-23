@@ -4,11 +4,8 @@ Changelog
 
 4.0-dev - (unreleased)
 ----------------------
- * TODO: Handle skins/portlet_menu;
- * TODO: Handle skins/nav_pathbar;
- * TODO: Handle portlet_app_navigation;
- * TODO: Handle global_pathbar;
  * TODO: Cleanup browser/ deprecated modules and templates;
+ * TODO: Fix browser > navigation > NavigationManagerPortlet
  * Cleanup: pylint, pyflakes violations [voineali #4285]
  * Feature: Plone 4.0.4 compatible release [voineali #4285]
 

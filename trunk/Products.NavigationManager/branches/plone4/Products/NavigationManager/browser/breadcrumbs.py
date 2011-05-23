@@ -1,0 +1,73 @@
+""" Custom breadcrumbs
+"""
+from zope.interface import implements
+from zope.component import queryMultiAdapter
+from Products.CMFPlone import utils
+from Products.CMFPlone.browser.interfaces import INavigationBreadcrumbs
+from Products.Five.browser import BrowserView
+
+class Breadcrumbs(BrowserView):
+    """ Custom breadcrumbs according with portal_navigationmanager
+    """
+    implements(INavigationBreadcrumbs)
+
+    @property
+    def site(self):
+        """ Site root
+        """
+        return self.request.form.get('site',
+                getattr(self.context, 'navigationmanager_site', 'default'))
+
+    @property
+    def menuid(self):
+        """ Menuid
+        """
+        return self.request.form.get('menuid',
+                getattr(self.context, 'navigationmanager_menuid', ''))
+
+    def breadcrumbs(self):
+        """ Breadcrumbs
+        """
+        menu = queryMultiAdapter((self.context, self.request), name=u'eea_menu')
+        if not menu:
+            return ()
+
+        if menu.isRoot():
+            return ()
+
+        rootid = menu.getSiteRootId()
+        crumbs = menu.getPath(self.site, self.menuid)
+
+        # Base breadcrumbs
+        base = ()
+        for crumb in crumbs:
+            cid = crumb.get('id', '')
+            if cid == rootid:
+                continue
+
+            url = crumb.get('url', None)
+            if not url:
+                continue
+
+            title = crumb.get('title', cid)
+
+            base += ({
+                'absolute_url': url,
+                'Title': title
+                },)
+
+        # Tail breadcrumbs
+        plone = queryMultiAdapter((self.context, self.request), name=u'plone')
+        if not plone:
+            return base
+
+        isDefault = plone.isDefaultPageInFolder()
+        if not self.menuid and (menu.isRoot() or isDefault):
+            return base
+
+        base += ({
+            'absolute_url': self.context.absolute_url(),
+            'Title': utils.pretty_title_or_id(self.context, self.context)
+            },)
+
+        return base
