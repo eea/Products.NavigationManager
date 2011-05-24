@@ -5,7 +5,6 @@ from zope.component import queryMultiAdapter
 from Products.CMFPlone import utils
 from Products.CMFPlone.browser.interfaces import INavigationBreadcrumbs
 from Products.CMFPlone.browser.navigation import PhysicalNavigationBreadcrumbs
-from Products.Five.browser import BrowserView
 
 class Breadcrumbs(PhysicalNavigationBreadcrumbs):
     """ Custom breadcrumbs according with portal_navigationmanager
