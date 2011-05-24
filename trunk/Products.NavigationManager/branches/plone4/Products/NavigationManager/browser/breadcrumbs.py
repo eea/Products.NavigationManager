@@ -4,9 +4,10 @@ from zope.interface import implements
 from zope.component import queryMultiAdapter
 from Products.CMFPlone import utils
 from Products.CMFPlone.browser.interfaces import INavigationBreadcrumbs
+from Products.CMFPlone.browser.navigation import PhysicalNavigationBreadcrumbs
 from Products.Five.browser import BrowserView
 
-class Breadcrumbs(BrowserView):
+class Breadcrumbs(PhysicalNavigationBreadcrumbs):
     """ Custom breadcrumbs according with portal_navigationmanager
     """
     implements(INavigationBreadcrumbs)
@@ -28,6 +29,11 @@ class Breadcrumbs(BrowserView):
     def breadcrumbs(self):
         """ Breadcrumbs
         """
+        ntool = utils.getToolByName(
+            self.context, 'portal_navigationmanager', None)
+        if not ntool:
+            return super(Breadcrumbs, self).breadcrumbs()
+
         menu = queryMultiAdapter((self.context, self.request), name=u'eea_menu')
         if not menu:
             return ()
