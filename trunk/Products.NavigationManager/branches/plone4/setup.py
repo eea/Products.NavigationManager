@@ -10,7 +10,7 @@ VERSION = open(os.path.join(*PATH)).read().strip()
 setup(
     name=NAME,
     version=VERSION,
-    description="NavigationManager skin for EEA",
+    description="EEA Navigation Manager skin for EEA",
     long_description=open("README.txt").read() + "\n" +
                      open(os.path.join("docs", "HISTORY.txt")).read(),
     url="https://svn.eionet.europa.eu/projects/"
