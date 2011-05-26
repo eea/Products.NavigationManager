@@ -7,7 +7,7 @@
     name="default"
     title="EEA Navigation Manager"
     directory="profiles/default"
-    description="Extension profile for Products.NavigationManager"
+    description="Extension profile for EEA Navigation Manager"
     provides="Products.GenericSetup.interfaces.EXTENSION"
     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
     />
@@ -15,7 +15,7 @@
   <genericsetup:importStep
     name="navigationmanager_various"
     title="NavigationManager: miscellaneous import steps"
-    description="Various setup for Products.NavigationManager"
+    description="Various setup for EEA Navigation Manager"
     handler="Products.NavigationManager.setuphandlers.setupVarious">
     <depends name="catalog" />
   </genericsetup:importStep>
