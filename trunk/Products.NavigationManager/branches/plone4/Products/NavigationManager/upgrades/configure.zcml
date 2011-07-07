@@ -9,13 +9,13 @@
     profile="Products.NavigationManager:default">
 
     <genericsetup:upgradeStep
-      title="Upgrade Products.NavigationManager"
+      title="Update portal_properties for NavigationManager"
       handler="Products.NavigationManager.upgrades.evolve4.evolve"
       />
 
     <genericsetup:upgradeDepends
-      title="Upgrade to version 4.0"
-      import_steps="catalog controlpanel propertiestool skins toolset types"
+      title="Import all steps from Products.NavigationManager profile"
+      import_profile="Products.NavigationManager:default"
       />
 
   </genericsetup:upgradeSteps>

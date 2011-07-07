@@ -1,29 +1,57 @@
 Changelog
 =========
-[David Ichim - david.ichim@eaudeweb.ro]
+
 
 4.0-dev - (unreleased)
 ----------------------
- * TODO: Cleanup browser/ deprecated modules and templates;
- * TODO: Fix browser > navigation > NavigationManagerPortlet
- * Cleanup: pylint, pyflakes violations [voineali #4285]
- * Feature: Plone 4.0.4 compatible release [voineali #4285]
+
+* TODO: Cleanup browser/ deprecated modules and templates;
+
+* TODO: Fix browser > navigation > NavigationManagerPortlet
+
+* Cleanup: pylint, pyflakes violations
+  [voineali #4285]
+
+* Feature: Added upgrade steps
+  [voineali #4392]
+
+* Feature: Plone 4.x compatible release
+  [voineali #4285]
+
 
 0.3-dev - (unreleased)
 ----------------------
- * Cleanup: of pyflakes violations [ichimdav #4141]
- * Bug fix: Removed deprecated ToolInit param product_name [voineali #4139]
- * Bug fix: Fixed DeprecationWarning: CMFCorePermissions [voineali #4139]
- * Bug fix: Fixed DeprecationWarning: PloneUtilities [voineali #4139]
- * Bug fix: Fixed DeprecationWarning: CustomizationPolicies [voineali #4139]
+
+* Cleanup: of pyflakes violations
+  [ichimdav #4141]
+
+* Bug fix: Removed deprecated ToolInit param product_name
+  [voineali #4139]
+
+* Bug fix: Fixed DeprecationWarning: CMFCorePermissions
+  [voineali #4139]
+
+* Bug fix: Fixed DeprecationWarning: PloneUtilities
+  [voineali #4139]
+
+* Bug fix: Fixed DeprecationWarning: CustomizationPolicies
+  [voineali #4139]
+
 
 0.2 - (2011-02-23)
 ------------------
- * Bug fix: fixes install method [ichimdav #2931]
+
+* Bug fix: fixes install method
+  [ichimdav #2931]
+
 
 0.1 - (2011-02-22)
 ------------------
- * Feature: eggified product to Products.NavigationManager [ichimdav #2931]
- * Change: fixed a lot of the errors and warnings that pylint gave [ichimdav #4140]
- * Initial release
 
+* Feature: eggified product to Products.NavigationManager
+  [ichimdav #2931]
+
+* Change: fixed a lot of the errors and warnings that pylint gave
+  [ichimdav #4140]
+
+* Initial release
