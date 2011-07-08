@@ -139,13 +139,13 @@ class NavigationManagerTree(BrowserView):
     def navigationTreeRootPath(self):
         """ Tree root path
         """
-        context = utils.context(self)
+        context = self.context
         return '/'.join(getApplicationRoot(context).getPhysicalPath())
 
     def navigationTree(self):
         """ Tree
         """
-        mContext = context = utils.context(self)
+        mContext = context = self.context
         menu = getMenu(context)
         strategy = None
         queryBuilder = None
