@@ -9,7 +9,7 @@
     profile="Products.NavigationManager:default">
 
     <genericsetup:upgradeStep
-      title="Update portal_properties for NavigationManager"
+      title="Update portal_properties for NavigationManager. Remove deprecated 'is_empty' catalog index/metadata"
       handler="Products.NavigationManager.upgrades.evolve4.evolve"
       />
 

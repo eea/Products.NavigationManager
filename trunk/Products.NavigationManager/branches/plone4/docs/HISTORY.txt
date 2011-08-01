@@ -12,6 +12,9 @@ Changelog
 * Cleanup: pylint, pyflakes violations
   [voineali #4285]
 
+* Feature: Dropped is_empty functionality
+  [voineali #4376]
+
 * Feature: Added upgrade steps
   [voineali #4392]
 

@@ -88,8 +88,7 @@ def removeEmptyFolders(tree):
     """
     new_children = []
     for child in tree['children']:
-        is_empty = getattr(child['item'], 'is_empty', False)
-        if child['currentItem'] or child['currentParent'] or not is_empty:
+        if child['currentItem'] or child['currentParent']:
             new_children.append(child)
     tree['children'] = new_children
 

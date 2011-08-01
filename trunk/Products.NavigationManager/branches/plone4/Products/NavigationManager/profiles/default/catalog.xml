@@ -3,10 +3,6 @@
  <index name="navSection" meta_type="KeywordIndex">
   <indexed_attr value="navSection"/>
  </index>
- <index name="is_empty" meta_type="FieldIndex">                                 
-  <indexed_attr value="is_empty"/>
- </index>
  <column value="navSection"/>
  <column value="is_default_page"/>
- <column value="is_empty"/>
 </object>

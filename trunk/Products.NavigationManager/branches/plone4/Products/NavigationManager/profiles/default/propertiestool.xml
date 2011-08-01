@@ -4,10 +4,5 @@
   <property name="idsNotToList" type="lines" purge="False">
    <element value="portal_navigationmanager"/>
   </property>
-  <property name="hide_if_empty" type="lines" purge="False">
-   <element value="Folder" />
-   <element value="Topic" />
-   <element value="RichTopic" />
-  </property>
  </object>
 </object>
