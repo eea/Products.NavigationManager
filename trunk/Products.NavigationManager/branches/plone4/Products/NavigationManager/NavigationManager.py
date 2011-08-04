@@ -68,7 +68,7 @@ class NavigationManager(UniqueObject, BaseFolder):
         IStatusMessage(context.REQUEST).addStatusMessage(msg, 'info')
         return 'success'
 
-    def getTree(self, site, tabselected='default'):
+    def getTree(self, site, tabselected='default', recursive=True):
         """
         It returns a list  of menu items objects from the root of this menu manager.
         Useful to generate top navigation like portal tabs.
@@ -93,6 +93,8 @@ class NavigationManager(UniqueObject, BaseFolder):
             if canonical and (canonical is not node):
                 node = canonical
 
-        tree, _selected = node.getTree(local, tabselected, language)
+        tree, _selected = node.getTree(local, tabselected, language,
+                                       recursive=recursive)
+
         for node in tree:
             yield node

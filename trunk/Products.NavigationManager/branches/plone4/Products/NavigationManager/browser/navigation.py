@@ -409,7 +409,7 @@ class PortalNavigationTabs(CatalogNavigationTabs):
                               'default')
 
         result = []
-        for node in ntool.getTree(site, tabselected):
+        for node in ntool.getTree(site, tabselected, recursive=False):
             item = node.get('item', {})
 
             data = {

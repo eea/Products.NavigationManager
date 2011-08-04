@@ -24,7 +24,26 @@ class NavigationItem(ATFolder):
     meta_type = archetype_name = portal_type = 'NavigationItem'
     schema = NavigationItem_schema
 
-    def getTree(self, local = False, tabselected='default', language = None):
+    def selected(self, tabselected='default', language=None):
+        """ Is node selected """
+        request = self.REQUEST
+
+        translation = (self.getTranslation(language)
+                       if hasattr(self, 'getTranslation') else None)
+
+        if language is not None and translation is not None:
+            myUrl = self.getTranslation(language).getUrl()
+        else:
+            myUrl = self.getUrl()
+
+        if myUrl.startswith('/'):
+            url = request.get('PATH_INFO')
+
+        return (self.getId() == tabselected) or (
+            tabselected == 'default') and myUrl == url
+
+    def getTree(self, local = False, tabselected='default',
+                language = None, recursive=True):
         """ Returns a list  of menu items objects from the root of this
             menu manager. Useful to generate top navigation like portal tabs.
         """
@@ -44,7 +63,10 @@ class NavigationItem(ATFolder):
             if state != 'published':
                 continue
 
-            children, selected = n.getTree(local, tabselected, language)
+            if recursive:
+                children, selected = n.getTree(local, tabselected, language)
+            else:
+                children, selected = [], self.selected(tabselected, language)
 
             if language is not None:
                 translation = (n.getTranslation(language)
@@ -70,17 +92,5 @@ class NavigationItem(ATFolder):
                 subItemSelected = True
 
         # Top menu selected if a subitem is selected
-        translation = (self.getTranslation(language)
-                       if hasattr(self, 'getTranslation') else None)
-
-        if language is not None and translation is not None:
-            myUrl = self.getTranslation(language).getUrl()
-        else:
-            myUrl = self.getUrl()
-
-        if myUrl.startswith('/'):
-            url = request.get('PATH_INFO')
-
-        selected = subItemSelected or self.getId() == tabselected or \
-                tabselected == 'default' and myUrl == url
+        selected = subItemSelected or self.selected(tabselected, language)
         return result, selected
