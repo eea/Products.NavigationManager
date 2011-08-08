@@ -4,12 +4,9 @@
 
   <object name="NavigationManager" meta_type="Filesystem Directory View"
     directory="Products.NavigationManager:skins/NavigationManager" />
-  <object name="NavigationManager_public" meta_type="Filesystem Directory View"
-    directory="Products.NavigationManager:skins/NavigationManager_public" />
 
  <skin-path name="*">
   <layer insert-after="custom" name="NavigationManager"/>
-  <layer insert-after="custom" name="NavigationManager_public"/>
  </skin-path>
 
 </object>
