@@ -1,6 +1,6 @@
 """ Navigation
 """
-#TODO: fix me, plone4
+#fix me, plone4
 #from zope.interface import implements
 #from zope.component import getMultiAdapter
 #from Products.CMFCore.utils import getToolByName
@@ -10,7 +10,7 @@
 #from Products.CMFPlone.browser.portlets.navigation import (
 #    NavigationPortlet as BaseNavigationPortlet,
 #)
-##TODO: below is current location
+## below is current location
 ##from plone.app.portlets.portlets.navigation import (
 ##    INavigationPortlet as BaseNavigationPortlet
 ##)

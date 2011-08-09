@@ -5,9 +5,26 @@ Changelog
 4.0-dev - (unreleased)
 ----------------------
 
+* TODO: Fix breadcrumbs;
+
 * TODO: Cleanup browser/ deprecated modules and templates;
 
-* TODO: Fix browser > navigation > NavigationManagerPortlet
+* TODO: Add upgrade step to add INavigationRoot marker interface for objects
+  that are marked with eea.themecentre.interfaces.IThemeCentre (see old themes_navigation_view logic);
+
+* TODO: Add upgrade step to cleanup old left_slots portlets
+  - portlet_themes;
+  - @@leftNavigationPortlet
+  - portlet_relatedthemes
+
+* TODO: Check if skins /../ portlet_navigation_sections.pt and portlet_menu.pt are deprecated and remove them;
+
+* TODO: Check if LeftNavigationSectionPortlet, RightNavigationSectionPortlet is deprecated and remove them;
+
+* TODO: Add accordion on navigation portlet sections;
+
+* TODO: Handle section in browser.navigation.NavigationRenderer.getNavTree;
+
 
 * Cleanup: pylint, pyflakes violations
   [voineali #4285]

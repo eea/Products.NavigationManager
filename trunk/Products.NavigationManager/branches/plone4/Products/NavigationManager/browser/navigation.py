@@ -1,7 +1,8 @@
 """ Navigation
 """
 from zope.interface import implements, directlyProvides, providedBy
-from zope.component import getMultiAdapter
+from zope.component import getMultiAdapter, queryAdapter
+from zope.schema.vocabulary import SimpleTerm
 
 from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
@@ -18,8 +19,8 @@ from plone.app.layout.navigation.interfaces import (
     IDefaultPage
 )
 
-#TODO: Plone4
-#from Products.CMFPlone.browser.interfaces import INavigationPortlet
+from plone.app.portlets.portlets.navigation import Renderer
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
 from Products.CMFPlone.browser.navtree import (
     DefaultNavtreeStrategy,
@@ -28,6 +29,7 @@ from Products.CMFPlone.browser.navtree import (
 
 from Products.NavigationManager.browser.buildtopictree import buildTopicTree
 from Products.PloneLanguageTool.interfaces import ITranslatable
+from Products.NavigationManager.sections.interfaces import INavigationSections
 from Products.NavigationManager.browser.interfaces import (
     INavigationManagerRequest,
     INavigationManagerTree,
@@ -249,31 +251,6 @@ class NavigationManagerTree(BrowserView):
             removeEmptyFolders(tree)
         return tree
 
-#TODO: Plone4  Fix me
-#class NavigationManagerPortlet(NavigationPortlet):
-    #""" EEA website navigation portlet fetches menu from navigation manager.
-    #"""
-
-    #implements(INavigationPortlet)
-
-    #def __init__(self, context, request):
-        #NavigationPortlet.__init__(self, context, request)
-        #mship = getToolByName(context, 'portal_membership')
-        #isAnonymous = mship.isAnonymousUser()
-        #if isAnonymous:
-            #root = getMenu(context)
-            #if root is not None:
-                #self._root = [ root ]
-
-    #def title(self):
-        #return self.navigationRoot().Title()
-
-    #def navigationRoot(self):
-        #""" Override """
-        #if not utils.base_hasattr(self, '_root'):
-            #self._root = [ NavigationPortlet.navigationRoot(self) ]
-        #return self._root[0]
-
 class NavtreeManagerStrategy(DefaultNavtreeStrategy):
     """ The navtree strategy used for the default navigation portlet and
         respects NavigationManager submenu as root.  """
@@ -310,7 +287,6 @@ class TopicNavtreeStrategy(NavtreeSectionStrategy):
             self.rootPath = getNavigationRoot(context)
         self.showAllParents = True
 
-
     def decoratorFactory(self, node):
         """ Decorator factory
         """
@@ -319,7 +295,7 @@ class TopicNavtreeStrategy(NavtreeSectionStrategy):
         newNode['defaultPage'] = getattr(item, 'is_default_page', False)
         return newNode
 
-class NavtreeManagerQueryBuilder:
+class NavtreeManagerQueryBuilder(object):
     """Build a navtree query based on the settings in navtree_properties
     """
     implements(INavigationQueryBuilder)
@@ -387,9 +363,9 @@ class DefaultPageIsNormalPage(DefaultPage):
     def isDefaultPage(self, obj, context_=None):
         """ Default page?
         """
-        return DefaultPage.isDefaultPage(self,
-                            obj, context_) and obj.exclude_from_nav() or False
-
+        if DefaultPage.isDefaultPage(self, obj, context_):
+            return obj.exclude_from_nav()
+        return False
 #
 # Override plone default behaviour
 #
@@ -420,3 +396,60 @@ class PortalNavigationTabs(CatalogNavigationTabs):
             }
             result.append(data)
         return result
+#
+# Navigation renderer
+#
+class NavigationRenderer(Renderer):
+    """ Custom renderer for navigation portlet
+    """
+    _template = ViewPageTemplateFile('templates/navigation.pt')
+    recurse = ViewPageTemplateFile('templates/navigation_recurse.pt')
+    section = ViewPageTemplateFile('templates/section.pt')
+
+    @property
+    def sections(self):
+        """ Navigation portlet sections
+        """
+        yield SimpleTerm('default', 'default', 'Menu')
+        sections = queryAdapter(self.context, INavigationSections)
+        if not sections:
+            return
+
+        for section in sections.left:
+            yield section
+
+    def getNavRootPath(self):
+        """ Tree root path
+        """
+        return '/'.join(getApplicationRoot(self.context).getPhysicalPath())
+
+    def getNavTree(self, _marker=None, section='default'):
+        """ getNavTree section aware
+        """
+        # TODO: Plone4 handle section
+        root = getApplicationRoot(self.context)
+
+        queryBuilder = getMultiAdapter(
+            (root, self.data), INavigationQueryBuilder)
+
+        strategy = getMultiAdapter(
+            (root, self.data), INavtreeStrategy)
+
+        return buildFolderTree(root, obj=self.context,
+                               query=queryBuilder(), strategy=strategy)
+
+    def createNavTree(self, section='default'):
+        """ createNavTree section aware
+        """
+        data = self.getNavTree(section=section)
+
+        bottomLevel = self.data.bottomLevel or self.properties.getProperty(
+            'bottomLevel', 0)
+
+        return self.recurse(children=data.get('children', []),
+                            level=1, bottomLevel=bottomLevel)
+
+    def createNavSection(self, section='default', label='Menu'):
+        """ Render navigations section
+        """
+        return self.section(section=section, sectionTitle=label)
