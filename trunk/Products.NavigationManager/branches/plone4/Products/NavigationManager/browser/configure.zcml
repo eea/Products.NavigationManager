@@ -89,4 +89,11 @@
       allowed_attributes="getNavTree displayLogo logoUrl logoParentUrl"
       / -->
 
+  <adapter
+    factory=".navigation.SectionAwareNavStrategy"
+    for="plone.app.layout.navigation.interfaces.INavigationRoot
+         plone.app.portlets.portlets.navigation.INavigationPortlet"
+    provides="plone.app.layout.navigation.interfaces.INavtreeStrategy"
+    />
+
 </configure>

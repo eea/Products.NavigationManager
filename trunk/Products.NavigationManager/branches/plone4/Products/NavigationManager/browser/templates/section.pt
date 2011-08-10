@@ -1,7 +1,8 @@
 <tal:section define="
   section section|options/section|string:default;
-  sectionTitle sectionTitle|options/sectionTitle|string:Menu;
-  ">
+  sectionTitle sectionTitle|options/sectionTitle|string:Menu;"
+  condition="python:view.display(section)">
+
   <dt class="portletSubMenuHeader">
     <span class="title" i18n:translate=""
       tal:content="sectionTitle">Menu 1</span>
@@ -14,4 +15,5 @@
       </li>
     </ul>
   </dd>
+
 </tal:section>

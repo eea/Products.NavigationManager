@@ -19,6 +19,7 @@ from plone.app.layout.navigation.interfaces import (
     IDefaultPage
 )
 
+from plone.app.portlets.portlets.navigation import NavtreeStrategy
 from plone.app.portlets.portlets.navigation import Renderer
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
@@ -397,14 +398,34 @@ class PortalNavigationTabs(CatalogNavigationTabs):
             result.append(data)
         return result
 #
-# Navigation renderer
+# Navigation portlet
 #
+class SectionAwareNavStrategy(NavtreeStrategy):
+    """ Navigation tree section aware strategy
+    """
+    implements(INavtreeStrategy)
+
+    def decoratorFactory(self, node):
+        """ Add custom properties to tha navigation tree node
+        """
+        newNode = super(SectionAwareNavStrategy, self).decoratorFactory(node)
+        item = node.get('item', None)
+        section = getattr(item, 'navSection', None) or 'default'
+        newNode['navSection'] = section
+        return newNode
+
 class NavigationRenderer(Renderer):
     """ Custom renderer for navigation portlet
     """
     _template = ViewPageTemplateFile('templates/navigation.pt')
     recurse = ViewPageTemplateFile('templates/navigation_recurse.pt')
     section = ViewPageTemplateFile('templates/section.pt')
+
+    def __init__(self, context, request, view, manager, data):
+        super(NavigationRenderer, self).__init__(
+            context, request, view, manager, data)
+        self.root = getApplicationRoot(self.context)
+        self._tree = {}
 
     @property
     def sections(self):
@@ -418,36 +439,46 @@ class NavigationRenderer(Renderer):
         for section in sections.left:
             yield section
 
+    def display(self, section='default'):
+        """ Display section
+        """
+        tree = self.getNavTree()
+        for child in tree.get('children', []):
+            if child.get('navSection', '') == section:
+                return True
+        return False
+
     def getNavRootPath(self):
         """ Tree root path
         """
-        return '/'.join(getApplicationRoot(self.context).getPhysicalPath())
+        return '/'.join(self.root.getPhysicalPath())
 
-    def getNavTree(self, _marker=None, section='default'):
+    def getNavTree(self, _marker=None):
         """ getNavTree section aware
         """
-        # TODO: Plone4 handle section
-        root = getApplicationRoot(self.context)
+        if not self._tree:
+            queryBuilder = getMultiAdapter(
+                (self.root, self.data), INavigationQueryBuilder)
 
-        queryBuilder = getMultiAdapter(
-            (root, self.data), INavigationQueryBuilder)
+            strategy = getMultiAdapter(
+                (self.root, self.data), INavtreeStrategy)
 
-        strategy = getMultiAdapter(
-            (root, self.data), INavtreeStrategy)
+            self._tree = buildFolderTree(self.root, obj=self.context,
+                                        query=queryBuilder(), strategy=strategy)
 
-        return buildFolderTree(root, obj=self.context,
-                               query=queryBuilder(), strategy=strategy)
+        return self._tree
 
     def createNavTree(self, section='default'):
         """ createNavTree section aware
         """
-        data = self.getNavTree(section=section)
+        data = self.getNavTree()
+        children = [child for child in data.get('children', [])
+                    if child.get('navSection', '') == section]
 
         bottomLevel = self.data.bottomLevel or self.properties.getProperty(
             'bottomLevel', 0)
 
-        return self.recurse(children=data.get('children', []),
-                            level=1, bottomLevel=bottomLevel)
+        return self.recurse(children=children, level=1, bottomLevel=bottomLevel)
 
     def createNavSection(self, section='default', label='Menu'):
         """ Render navigations section
