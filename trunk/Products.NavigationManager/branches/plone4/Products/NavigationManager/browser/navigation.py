@@ -428,6 +428,12 @@ class NavigationRenderer(Renderer):
         self._tree = {}
 
     @property
+    def navtree_start(self):
+        """ Level to start navigation tree
+        """
+        return len(self.root.getPhysicalPath()) - 1
+
+    @property
     def sections(self):
         """ Navigation portlet sections
         """
@@ -463,6 +469,8 @@ class NavigationRenderer(Renderer):
             strategy = getMultiAdapter(
                 (self.root, self.data), INavtreeStrategy)
 
+            query = queryBuilder()
+            query['path']['navtree_start'] = self.navtree_start
             self._tree = buildFolderTree(self.root, obj=self.context,
                                         query=queryBuilder(), strategy=strategy)
 
