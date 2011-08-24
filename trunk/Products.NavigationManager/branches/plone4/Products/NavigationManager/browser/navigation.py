@@ -412,6 +412,8 @@ class SectionAwareNavStrategy(NavtreeStrategy):
         item = node.get('item', None)
         section = getattr(item, 'navSection', None) or 'default'
         newNode['navSection'] = section
+        is_default_page = getattr(item, 'is_default_page', False)
+        newNode['is_default_page'] = is_default_page
         return newNode
 
 class NavigationRenderer(Renderer):
@@ -471,8 +473,19 @@ class NavigationRenderer(Renderer):
 
             query = queryBuilder()
             query['path']['navtree_start'] = self.navtree_start
+            query['is_default_page'] = {
+                'query': [False, True],
+                'operator': 'or'
+            }
             self._tree = buildFolderTree(self.root, obj=self.context,
-                                        query=queryBuilder(), strategy=strategy)
+                                         query=query, strategy=strategy)
+
+            # Fix default page position
+            for index, child in enumerate(self._tree.get('children', [])):
+                if child.get('is_default_page', False):
+                    self._tree['children'].pop(index)
+                    self._tree['children'].insert(0, child)
+                    break
 
         return self._tree
 

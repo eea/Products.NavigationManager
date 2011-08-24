@@ -9,9 +9,6 @@ Changelog
 
 * TODO: Cleanup browser/ deprecated modules and templates;
 
-* TODO: Add upgrade step to add INavigationRoot marker interface for objects
-  that are marked with eea.themecentre.interfaces.IThemeCentre (see old themes_navigation_view logic);
-
 * TODO: Add upgrade step to cleanup old left_slots portlets
   - portlet_themes;
   - @@leftNavigationPortlet
