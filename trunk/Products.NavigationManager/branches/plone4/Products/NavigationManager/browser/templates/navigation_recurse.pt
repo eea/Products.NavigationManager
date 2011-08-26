@@ -9,6 +9,7 @@
                 children        node/children;
                 item_url        node/getURL;
                 item_icon       nocall:node/item_icon;
+                html_tag        item_icon/html_tag;
                 item_type       node/portal_type;
                 is_current      node/currentItem;
                 is_in_path      node/currentParent;
@@ -27,7 +28,10 @@
         <a tal:attributes="href python:item_url;
                            title node/Description;
                            class string:$item_class${li_class}${li_extr_class}${li_folder_class} $item_type_class">
-            <img tal:replace="structure item_icon/html_tag" />
+            <img tal:condition="html_tag" tal:replace="structure html_tag" />
+            <img tal:condition="not:html_tag" width="16" height="16"
+                src="document_icon.png" tal:attributes="alt item_type" />
+
             <span tal:content="node/Title">Selected Item Title</span>
         </a>
 
