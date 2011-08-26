@@ -20,6 +20,7 @@ from plone.app.layout.navigation.interfaces import (
 )
 
 from plone.app.portlets.portlets.navigation import NavtreeStrategy
+from plone.app.portlets.portlets.navigation import QueryBuilder
 from plone.app.portlets.portlets.navigation import Renderer
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
@@ -400,6 +401,23 @@ class PortalNavigationTabs(CatalogNavigationTabs):
 #
 # Navigation portlet
 #
+class SectionAwareQueryBuilder(QueryBuilder):
+    """ Navigation tree section aware query builder
+    """
+    @property
+    def navtree_start(self):
+        """ Level to start navigation tree
+        """
+        return len(self.context.getPhysicalPath()) - 1
+
+    def __call__(self):
+        self.query['path']['navtree_start'] = self.navtree_start
+        self.query['is_default_page'] = {
+            'query': [False, True],
+            'operator': 'or'
+        }
+        return self.query
+
 class SectionAwareNavStrategy(NavtreeStrategy):
     """ Navigation tree section aware strategy
     """
@@ -430,12 +448,6 @@ class NavigationRenderer(Renderer):
         self._tree = {}
 
     @property
-    def navtree_start(self):
-        """ Level to start navigation tree
-        """
-        return len(self.root.getPhysicalPath()) - 1
-
-    @property
     def sections(self):
         """ Navigation portlet sections
         """
@@ -461,32 +473,52 @@ class NavigationRenderer(Renderer):
         """
         return '/'.join(self.root.getPhysicalPath())
 
+    def fix_defaultpage_position(self, tree):
+        """ Fix default page position
+        """
+        for index, child in enumerate(tree.get('children', [])):
+            if child.get('is_default_page', False):
+                tree['children'].pop(index)
+                tree['children'].insert(0, child)
+                break
+        return tree
+
+    def getRecursiveNavTree(self, root=None):
+        """ Recurse to get context children
+        """
+        if not root:
+            root = self.root
+
+        queryBuilder = getMultiAdapter(
+                (root, self.data), INavigationQueryBuilder)
+
+        strategy = getMultiAdapter(
+            (root, self.data), INavtreeStrategy)
+
+        tree = buildFolderTree(root, obj=self.context,
+                               query=queryBuilder(), strategy=strategy)
+        tree = self.fix_defaultpage_position(tree)
+
+        for child in tree.get('children', []):
+            if not child.get('show_children', False):
+                continue
+
+            if not (child.get('currentParent', False) or
+                    child.get('currentItem', False)):
+                continue
+
+            brain = child.get('item', None)
+            doc = brain.getObject()
+            childtree = self.getRecursiveNavTree(doc)
+            child['children'] = childtree.get('children', [])
+
+        return tree
+
     def getNavTree(self, _marker=None):
         """ getNavTree section aware
         """
         if not self._tree:
-            queryBuilder = getMultiAdapter(
-                (self.root, self.data), INavigationQueryBuilder)
-
-            strategy = getMultiAdapter(
-                (self.root, self.data), INavtreeStrategy)
-
-            query = queryBuilder()
-            query['path']['navtree_start'] = self.navtree_start
-            query['is_default_page'] = {
-                'query': [False, True],
-                'operator': 'or'
-            }
-            self._tree = buildFolderTree(self.root, obj=self.context,
-                                         query=query, strategy=strategy)
-
-            # Fix default page position
-            for index, child in enumerate(self._tree.get('children', [])):
-                if child.get('is_default_page', False):
-                    self._tree['children'].pop(index)
-                    self._tree['children'].insert(0, child)
-                    break
-
+            self._tree = self.getRecursiveNavTree(self.root)
         return self._tree
 
     def createNavTree(self, section='default'):

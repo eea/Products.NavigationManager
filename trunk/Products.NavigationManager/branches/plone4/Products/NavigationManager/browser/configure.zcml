@@ -78,22 +78,18 @@
     <allow attributes="Title portal_type getURL getRemoteUrl Creator review_state Description getUrl"/>
   </class>
 
-  <!-- plone changes -->
-  <!-- #TODO: fix me, plone4 -->
-  <!-- browser:page
-      for="*"
-      name="themes_navigation_view"
-      class=".portlets.navigation.NavigationPortlet"
-      permission="zope.Public"
-      allowed_interface=".portlets.navigation.INavigationPortlet"
-      allowed_attributes="getNavTree displayLogo logoUrl logoParentUrl"
-      / -->
-
   <adapter
     factory=".navigation.SectionAwareNavStrategy"
-    for="plone.app.layout.navigation.interfaces.INavigationRoot
+    for=" Products.Archetypes.interfaces.base.IBaseObject
          plone.app.portlets.portlets.navigation.INavigationPortlet"
     provides="plone.app.layout.navigation.interfaces.INavtreeStrategy"
+    />
+
+  <adapter
+    factory=".navigation.SectionAwareQueryBuilder"
+    for=" Products.Archetypes.interfaces.base.IBaseObject
+         plone.app.portlets.portlets.navigation.INavigationPortlet"
+    provides="plone.app.layout.navigation.interfaces.INavigationQueryBuilder"
     />
 
 </configure>
