@@ -498,19 +498,20 @@ class NavigationRenderer(Renderer):
         tree = buildFolderTree(root, obj=self.context,
                                query=queryBuilder(), strategy=strategy)
         tree = self.fix_defaultpage_position(tree)
-
-        for child in tree.get('children', []):
-            if not child.get('show_children', False):
-                continue
-
-            if not (child.get('currentParent', False) or
-                    child.get('currentItem', False)):
-                continue
-
-            brain = child.get('item', None)
-            doc = brain.getObject()
-            childtree = self.getRecursiveNavTree(doc)
-            child['children'] = childtree.get('children', [])
+        
+        ##XXX Plone4 bugous recursive code in some contexts
+        #for child in tree.get('children', []):
+        #    if not child.get('show_children', False):
+        #        continue
+        #
+        #    if not (child.get('currentParent', False) or
+        #            child.get('currentItem', False)):
+        #        continue
+        #
+        #    brain = child.get('item', None)
+        #    doc = brain.getObject()
+        #    childtree = self.getRecursiveNavTree(doc)
+        #    child['children'] = childtree.get('children', [])
 
         return tree
 
