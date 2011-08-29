@@ -5,29 +5,6 @@
     <implements interface=".interfaces.INavigationItem" />
   </class>
 
-  <adapter for=".interfaces.INavigationItem
-                .interfaces.INavigationManagerTree"
-    factory=".navigation.NavtreeManagerStrategy"
-    provides=".navigation.INavtreeStrategy" />
-
-  <adapter for="Products.ATContentTypes.content.topic.ATTopic
-                .interfaces.INavigationManagerTree"
-    factory=".navigation.TopicNavtreeStrategy"
-    provides=".navigation.INavtreeStrategy" />
-
-  <adapter for="* .interfaces.INavigationManagerTree"
-    factory=".navigation.NavtreeSectionStrategy"
-    provides=".navigation.INavtreeStrategy" />
-
-  <adapter for="*"
-    factory=".navigation.NavtreeManagerQueryBuilderForSections"
-    provides="Products.CMFPlone.browser.navtree.INavigationQueryBuilder" />
-
-  <adapter for="* .interfaces.INavigationManagerRequest"
-    factory=".navigation.DefaultPageIsNormalPage"
-    provides="plone.app.layout.navigation.interfaces.IDefaultPage"
-    name="default_page" />
-
   <browser:page
     for="OFS.interfaces.IItem"
     name="breadcrumbs_view"
@@ -73,10 +50,6 @@
     permission="zope.Public"
     class=".sections.RightNavigationSectionPortlet"
     />
-
-  <class class=".navigation.ListAllNode">
-    <allow attributes="Title portal_type getURL getRemoteUrl Creator review_state Description getUrl"/>
-  </class>
 
   <adapter
     factory=".navigation.SectionAwareNavStrategy"

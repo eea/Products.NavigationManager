@@ -4,5 +4,6 @@
   <property name="idsNotToList" type="lines" purge="False">
    <element value="portal_navigationmanager"/>
   </property>
+  <property name="bottomLevel" type="int">10</property>
  </object>
 </object>

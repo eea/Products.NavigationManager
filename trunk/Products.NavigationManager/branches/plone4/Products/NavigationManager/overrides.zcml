@@ -2,14 +2,6 @@
   xmlns:plone="http://namespaces.plone.org/plone"
   xmlns:browser="http://namespaces.zope.org/browser">
 
-  <browser:page
-    for="*"
-    name="navtree_builder_view"
-    class=".browser.navigation.NavigationManagerTree"
-    permission="zope.Public"
-    allowed_attributes="navigationTree"
-    />
-
   <plone:portletRenderer
     portlet="plone.app.portlets.portlets.navigation.INavigationPortlet"
     class=".browser.navigation.NavigationRenderer"
