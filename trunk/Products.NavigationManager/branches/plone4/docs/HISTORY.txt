@@ -7,16 +7,12 @@ Changelog
 
 * TODO: Fix breadcrumbs;
 
-* TODO: Cleanup browser/ deprecated modules and templates;
-
 * TODO: Add upgrade step to cleanup old left_slots portlets
   - portlet_themes;
   - @@leftNavigationPortlet
   - portlet_relatedthemes
 
-* TODO: Check if skins /../ portlet_navigation_sections.pt and portlet_menu.pt are deprecated and remove them;
-
-* TODO: Check if LeftNavigationSectionPortlet, RightNavigationSectionPortlet is deprecated and remove them;
+* TODO: Check if skins /../ portlet_menu.pt is deprecated and remove it;
 
 * Cleanup: pylint, pyflakes violations
   [voineali #4285]

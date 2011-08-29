@@ -37,20 +37,6 @@
     allowed_interface="Products.CMFPlone.browser.interfaces.IPlone"
     />
 
-  <browser:page
-    for="*"
-    name="leftNavigationSections"
-    permission="zope.Public"
-    class=".sections.LeftNavigationSectionPortlet"
-    />
-
-  <browser:page
-    for="*"
-    name="rightNavigationSections"
-    permission="zope.Public"
-    class=".sections.RightNavigationSectionPortlet"
-    />
-
   <adapter
     factory=".navigation.SectionAwareNavStrategy"
     for="Products.Archetypes.interfaces.base.IBaseObject

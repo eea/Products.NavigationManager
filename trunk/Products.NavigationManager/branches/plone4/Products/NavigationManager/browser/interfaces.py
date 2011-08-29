@@ -1,13 +1,6 @@
 """ Browser interfaces
 """
-from zope.interface import Interface, Attribute
-from Products.CMFPlone.browser.interfaces import INavigationTree
-
-class INavigationManagerRequest(INavigationTree):
-    """ Marker interface for navigation manager request """
-
-class INavigationManagerTree(INavigationTree):
-    """ Marker interface for navigation manager tree """
+from zope.interface import Interface
 
 class INavigationItem(Interface):
     """ Marker interface """
@@ -32,12 +25,3 @@ class IMenu(Interface):
 
     def getSiteRootId():
         """ returns the id of the site root content folder """
-
-class IContentNavigationSectionMenu(Interface):
-    """ Content Navigation Section Menu
-    """
-    def display():
-        """ Retrun true or false if the navigation section meny should be
-        displayed. """
-
-    menu = Attribute(u"Return the sections for the menu.")

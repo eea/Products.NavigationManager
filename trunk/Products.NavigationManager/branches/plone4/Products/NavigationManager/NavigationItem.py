@@ -26,7 +26,7 @@ class NavigationItem(ATFolder):
 
     def selected(self, tabselected='default', language=None):
         """ Is node selected """
-        request = self.REQUEST
+        request = getattr(self, 'REQUEST', {})
 
         translation = (self.getTranslation(language)
                        if hasattr(self, 'getTranslation') else None)
@@ -36,8 +36,9 @@ class NavigationItem(ATFolder):
         else:
             myUrl = self.getUrl()
 
+        url = request.get('HTTP_REFERER', '')
         if myUrl.startswith('/'):
-            url = request.get('PATH_INFO')
+            url = request.get('PATH_INFO', '')
 
         return (self.getId() == tabselected) or (
             tabselected == 'default') and myUrl == url
@@ -47,9 +48,9 @@ class NavigationItem(ATFolder):
         """ Returns a list  of menu items objects from the root of this
             menu manager. Useful to generate top navigation like portal tabs.
         """
-        request = self.REQUEST
-        actualUrl = request.get('ACTUAL_URL')
-        url = request.get('HTTP_REFERER')
+        request = getattr(self, 'REQUEST', {})
+        actualUrl = request.get('ACTUAL_URL', '')
+        url = request.get('HTTP_REFERER', '')
         if local or not url:
             url = actualUrl
         result = []
