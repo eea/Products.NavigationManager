@@ -12,8 +12,6 @@ Changelog
   - @@leftNavigationPortlet
   - portlet_relatedthemes
 
-* TODO: Check if skins /../ portlet_menu.pt is deprecated and remove it;
-
 * Cleanup: pylint, pyflakes violations
   [voineali #4285]
 
