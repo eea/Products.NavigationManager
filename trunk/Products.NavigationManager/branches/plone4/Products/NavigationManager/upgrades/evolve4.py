@@ -10,16 +10,22 @@ def evolve(context):
     # Cleanup siteproperties
     ptool = getToolByName(context, 'portal_properties')
     props = getattr(ptool, 'site_properties', None)
+    nprops = getattr(ptool, 'navtree_properties', None)
 
     # Unhide subtypes is deprecated, delete it
     if hasattr(props, 'unhide_subtypes'):
         logger.info('Removing unhide_subtypes property from site_properties')
         props.manage_delProperties(ids=['unhide_subtypes', ])
 
-    # hide_if_empty moved to navtree_properties
+    # hide_if_empty is deprecated, delete it
     if hasattr(props, 'hide_if_empty'):
         logger.info('Removing hide_if_empty property from site_properties')
         props.manage_delProperties(ids=['hide_if_empty', ])
+
+    # topicListingInNavtree is deprecated, delete it
+    if hasattr(nprops, 'topicListingInNavtree'):
+        logger.info('Removing topicListingInNavtree from navtree_properties')
+        nprops.manage_delProperties(ids=['topicListingInNavtree', ])
 
     # Delete is_empty catalog index/column
     ctool = getToolByName(context, 'portal_catalog')

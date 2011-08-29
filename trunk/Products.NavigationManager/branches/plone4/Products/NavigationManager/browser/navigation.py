@@ -22,7 +22,6 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
 from Products.NavigationManager.sections.interfaces import INavigationSections
 
-
 def getApplicationRoot(obj):
     """ Application Root
     """
@@ -34,6 +33,53 @@ def getApplicationRoot(obj):
         obj = utils.parent(obj)
 
     return obj
+
+class ListAllNode(object):
+    """ This is an object that pretends to be a brain. """
+
+    portal_type = 'Document'
+    review_state = 'published'
+    getUrl = 'folder_listing'
+    getId = 'list-all'
+    getIcon = 'document_icon.png'
+
+    def __getitem__(self, name, default=None):
+        return getattr(self, name, default)
+
+    def Title(self):
+        """ Title
+        """
+        return 'List all'
+
+    def Description(self):
+        """ Description
+        """
+        return 'List all items'
+
+    def Creator(self):
+        """ Creator
+        """
+        return ''
+
+    def UID(self):
+        """ UID
+        """
+        return ''
+
+    def getPath(self):
+        """ Path
+        """
+        return self.getUrl
+
+    def getURL(self):
+        """ URL
+        """
+        return self.getUrl
+
+    def getRemoteUrl(self):
+        """ Remote URL
+        """
+        return None
 #
 # Override plone default behaviour
 #
@@ -98,6 +144,20 @@ class SectionAwareNavStrategy(NavtreeStrategy):
         newNode['navSection'] = section
         is_default_page = getattr(item, 'is_default_page', False)
         newNode['is_default_page'] = is_default_page
+
+        # List all item
+        if isinstance(item, ListAllNode):
+            ptool = getToolByName(self.context, 'portal_properties')
+            ntool = getattr(ptool, 'navtree_properties')
+
+            listAllTemplate = ntool.getProperty(
+                'listAllTemplate', '') or 'folder_listing'
+            item.getUrl = listAllTemplate
+
+            url = '/'.join((self.context.absolute_url(), item.getUrl))
+            newNode['absolute_url'] = url
+            newNode['getURL'] = url
+
         return newNode
 
 class NavigationRenderer(Renderer):
@@ -132,6 +192,12 @@ class NavigationRenderer(Renderer):
         return self.data.bottomLevel or self.properties.getProperty(
             'bottomLevel', 0)
 
+    @property
+    def maxChildren(self):
+        """ Maximum children before 'List all' link
+        """
+        return self.properties.getProperty('maxChildren', 0)
+
     def display(self, section='default'):
         """ Display section
         """
@@ -156,6 +222,48 @@ class NavigationRenderer(Renderer):
                 break
         return tree
 
+    def apply_maxChildren(self, tree, context=None):
+        """ Apply maxChildren on tree
+        """
+        maxChildren = self.maxChildren
+        if maxChildren <= 0:
+            return tree
+
+        children = tree.get('children', [])
+        if len(children) <= maxChildren:
+            return tree
+
+        newChildren = []
+        for index, child in enumerate(children):
+            # Always include current item/parent
+            if child.get('currentParent', False
+                         ) or child.get('currentItem', False):
+                newChildren.append(child)
+                continue
+
+            if index >= maxChildren:
+                continue
+
+            newChildren.append(child)
+
+        # List all node
+        item = ListAllNode()
+        listAllNode = {
+            'item': item,
+            'depth': 1,  # irrelevant
+            'currentItem': False,
+            'currentParent': False,
+            'children': []
+        }
+
+        strategy = getMultiAdapter((context, self.data), INavtreeStrategy)
+        listAllNode = strategy.decoratorFactory(listAllNode)
+
+        newChildren.append(listAllNode)
+
+        tree['children'] = newChildren
+        return tree
+
     def getRecursiveNavTree(self, root=None, depth=1):
         """ Recurse to get context children
         """
@@ -174,6 +282,7 @@ class NavigationRenderer(Renderer):
 
         tree = buildFolderTree(root, obj=self.context,
                                query=queryBuilder(), strategy=strategy)
+
         tree = self.fix_defaultpage_position(tree)
 
         for child in tree.get('children', []):
@@ -187,6 +296,7 @@ class NavigationRenderer(Renderer):
             brain = child.get('item', None)
             doc = brain.getObject()
             childtree = self.getRecursiveNavTree(doc, depth=depth+1)
+            childtree = self.apply_maxChildren(childtree, context=doc)
             child['children'] = childtree.get('children', [])
 
         return tree

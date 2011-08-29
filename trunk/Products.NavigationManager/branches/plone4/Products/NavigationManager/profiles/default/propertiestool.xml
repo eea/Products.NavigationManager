@@ -5,5 +5,7 @@
    <element value="portal_navigationmanager"/>
   </property>
   <property name="bottomLevel" type="int">10</property>
+  <property name="maxChildren" type="int">10</property>
+  <property name="listAllTemplate" type="string">folder_listing</property>
  </object>
 </object>
