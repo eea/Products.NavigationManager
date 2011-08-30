@@ -230,7 +230,8 @@ class NavigationRenderer(Renderer):
             return tree
 
         children = tree.get('children', [])
-        if len(children) <= maxChildren:
+
+        if len(children) <= (maxChildren + maxChildren * 0.20): # orphans
             return tree
 
         newChildren = []
@@ -295,6 +296,13 @@ class NavigationRenderer(Renderer):
 
             brain = child.get('item', None)
             doc = brain.getObject()
+
+            # Avoid infinite recursion
+            if doc == root:
+                child = self.fix_defaultpage_position(child)
+                tree['children'] = child.get('children', [])
+                break
+
             childtree = self.getRecursiveNavTree(doc, depth=depth+1)
             childtree = self.apply_maxChildren(childtree, context=doc)
             child['children'] = childtree.get('children', [])

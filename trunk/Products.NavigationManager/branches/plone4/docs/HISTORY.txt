@@ -7,11 +7,6 @@ Changelog
 
 * TODO: Fix breadcrumbs;
 
-* TODO: Add upgrade step to cleanup old left_slots portlets
-  - portlet_themes;
-  - @@leftNavigationPortlet
-  - portlet_relatedthemes
-
 * Cleanup: pylint, pyflakes violations
   [voineali #4285]
 
