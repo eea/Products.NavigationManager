@@ -5,6 +5,13 @@ Changelog
 4.0-dev - (unreleased)
 ----------------------
 
+* Feature: Added an easy way to hide breadcrumbs viewlet by just marking
+  object with IHideBreadcrumbsViewlet interface.
+  [voineali #4464]
+
+* Feature: Enabled breadcrumbs viewlet
+  [voineali #4464]
+
 * Cleanup: pylint, pyflakes violations
   [voineali #4285]
 
