@@ -25,3 +25,7 @@ class IMenu(Interface):
 
     def getSiteRootId():
         """ returns the id of the site root content folder """
+
+class IHideBreadcrumbsViewlet(Interface):
+    """ Marker for content which should hide breadcrumbs viewlet
+    """

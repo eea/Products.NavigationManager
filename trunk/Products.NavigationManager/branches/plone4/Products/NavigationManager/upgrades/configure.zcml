@@ -14,7 +14,7 @@
       />
 
     <genericsetup:upgradeStep
-      title="Hide SITE and its translations from breadcrumbs"
+      title="Hide SITE and its translations from breadcrumbs. Hide breadcrumbs viewlet on front-page"
       handler="Products.NavigationManager.upgrades.evolve4.fix_site_breadcrumbs"
       />
 

@@ -4,6 +4,8 @@ import logging
 from zope.interface import alsoProvides
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
+from Products.NavigationManager.interfaces import IHideBreadcrumbsViewlet
+
 logger = logging.getLogger('Products.NavigationManager.upgrades')
 
 def evolve(context):
@@ -56,6 +58,10 @@ def fix_site_breadcrumbs(context):
         logger.info('Applying IHideFromBreadcrumbs on SITE')
         alsoProvides(site, IHideFromBreadcrumbs)
 
+    if not IHideBreadcrumbsViewlet.providedBy(site):
+        logger.info('Applying IHideBreadcrumbsViewlet on SITE')
+        alsoProvides(site, IHideBreadcrumbsViewlet)
+
     if not hasattr(site, 'getTranslations'):
         logger.info('No translations. Aborting...')
         return
@@ -65,5 +71,9 @@ def fix_site_breadcrumbs(context):
         if not IHideFromBreadcrumbs.providedBy(translation):
             logger.info('Applying IHideFromBreadcrumbs on %s', lang)
             alsoProvides(translation, IHideFromBreadcrumbs)
+
+        if not IHideBreadcrumbsViewlet.providedBy(translation):
+            logger.info('Applying IHideBreadcrumbsViewlet on %s', lang)
+            alsoProvides(translation, IHideBreadcrumbsViewlet)
 
     logger.info('Hiding SITE and its translations from breadcrumbs... DONE')

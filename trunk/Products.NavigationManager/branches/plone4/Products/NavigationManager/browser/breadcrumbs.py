@@ -10,6 +10,9 @@ from Products.CMFCore.interfaces import ISiteRoot
 from Acquisition import aq_inner
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
 from plone.app.layout.viewlets.common import PathBarViewlet
+from Products.NavigationManager.browser.interfaces import (
+    IHideBreadcrumbsViewlet,
+)
 
 class Breadcrumbs(PhysicalNavigationBreadcrumbs):
     """ Custom breadcrumbs
@@ -73,3 +76,10 @@ class BreadcrumbsViewlet(PathBarViewlet):
         """ Read-only
         """
         return
+
+    def render(self):
+        """ Handle IHideBreadcrumbs marker interface
+        """
+        if IHideBreadcrumbsViewlet.providedBy(self.context):
+            return ""
+        return self.index()
