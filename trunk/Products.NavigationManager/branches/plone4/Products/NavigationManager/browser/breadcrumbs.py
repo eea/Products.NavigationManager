@@ -1,78 +1,75 @@
 """ Custom breadcrumbs
 """
 from zope.interface import implements
-from zope.component import queryMultiAdapter
+from zope.component import getMultiAdapter
 from Products.CMFPlone import utils
 from Products.CMFPlone.browser.interfaces import INavigationBreadcrumbs
 from Products.CMFPlone.browser.navigation import PhysicalNavigationBreadcrumbs
+from Products.CMFPlone.browser.navigation import get_view_url
+from Products.CMFCore.interfaces import ISiteRoot
+from Acquisition import aq_inner
+from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
+from plone.app.layout.viewlets.common import PathBarViewlet
 
 class Breadcrumbs(PhysicalNavigationBreadcrumbs):
-    """ Custom breadcrumbs according with portal_navigationmanager
+    """ Custom breadcrumbs
     """
     implements(INavigationBreadcrumbs)
-
-    @property
-    def site(self):
-        """ Site root
-        """
-        return self.request.form.get('site',
-                getattr(self.context, 'navigationmanager_site', 'default'))
-
-    @property
-    def menuid(self):
-        """ Menuid
-        """
-        return self.request.form.get('menuid',
-                getattr(self.context, 'navigationmanager_menuid', ''))
 
     def breadcrumbs(self):
         """ Breadcrumbs
         """
-        ntool = utils.getToolByName(
-            self.context, 'portal_navigationmanager', None)
-        if not ntool:
-            return super(Breadcrumbs, self).breadcrumbs()
-
-        menu = queryMultiAdapter((self.context, self.request), name=u'eea_menu')
-        if not menu:
+        if ISiteRoot.providedBy(self.context):
             return ()
 
-        if menu.isRoot():
-            return ()
+        context = aq_inner(self.context)
+        request = self.request
+        container = utils.parent(context)
 
-        rootid = menu.getSiteRootId()
-        crumbs = menu.getPath(self.site, self.menuid)
+        try:
+            name, item_url = get_view_url(context)
+        except AttributeError:
+            print context
+            raise
 
-        # Base breadcrumbs
-        base = ()
-        for crumb in crumbs:
-            cid = crumb.get('id', '')
-            if cid == rootid:
-                continue
+        if container is None:
+            return ({'absolute_url': item_url,
+                     'Title': utils.pretty_title_or_id(context, context),
+                    },)
 
-            url = crumb.get('url', None)
-            if not url:
-                continue
+        view = getMultiAdapter((container, request), name='breadcrumbs_view')
+        base = tuple(view.breadcrumbs())
 
-            title = crumb.get('title', cid)
-
-            base += ({
-                'absolute_url': url,
-                'Title': title
-                },)
-
-        # Tail breadcrumbs
-        plone = queryMultiAdapter((self.context, self.request), name=u'plone')
-        if not plone:
+        # Some things want to be hidden from the breadcrumbs
+        if IHideFromBreadcrumbs.providedBy(context):
             return base
 
-        isDefault = plone.isDefaultPageInFolder()
-        if not self.menuid and (menu.isRoot() or isDefault):
-            return base
+        if base:
+            item_url = '%s/%s' % (base[-1]['absolute_url'], name)
 
-        base += ({
-            'absolute_url': self.context.absolute_url(),
-            'Title': utils.pretty_title_or_id(self.context, self.context)
-            },)
+        # don't show default pages in breadcrumbs
+        if not utils.isDefaultPage(context, request):
+            base += ({'absolute_url': item_url,
+                      'Title': utils.pretty_title_or_id(context, context),
+                     },)
 
         return base
+
+class BreadcrumbsViewlet(PathBarViewlet):
+    """ Custom breadcrumbs viewlet
+    """
+
+    @property
+    def navigation_root_url(self):
+        """ Override navigation root to portal url
+        """
+        parent = aq_inner(self.context)
+        while not ISiteRoot.providedBy(parent):
+            parent = utils.parent(parent)
+        return parent.absolute_url()
+
+    @navigation_root_url.setter
+    def navigation_root_url(self, value):
+        """ Read-only
+        """
+        return

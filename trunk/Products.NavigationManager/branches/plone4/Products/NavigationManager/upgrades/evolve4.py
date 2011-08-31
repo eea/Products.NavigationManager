@@ -1,7 +1,9 @@
 """ Evolution scripts
 """
 import logging
+from zope.interface import alsoProvides
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
 logger = logging.getLogger('Products.NavigationManager.upgrades')
 
 def evolve(context):
@@ -37,3 +39,31 @@ def evolve(context):
     if 'is_empty' in ctool.schema():
         logger.info('Removing is_empty metadata from portal_catalog')
         ctool.delColumn('is_empty')
+
+def fix_site_breadcrumbs(context):
+    """ Hide SITE from breadcrumbs
+    """
+    logger.info('Hiding SITE and its translations from breadcrumbs...')
+    portal_url = getToolByName(context, 'portal_url')
+    portal = portal_url.getPortalObject()
+    site = getattr(portal, 'SITE', None)
+
+    if not site:
+        logger.info('Nothing to do. Aborting...')
+        return
+
+    if not IHideFromBreadcrumbs.providedBy(site):
+        logger.info('Applying IHideFromBreadcrumbs on SITE')
+        alsoProvides(site, IHideFromBreadcrumbs)
+
+    if not hasattr(site, 'getTranslations'):
+        logger.info('No translations. Aborting...')
+        return
+
+    for lang in site.getTranslations():
+        translation = site.getTranslation(lang)
+        if not IHideFromBreadcrumbs.providedBy(translation):
+            logger.info('Applying IHideFromBreadcrumbs on %s', lang)
+            alsoProvides(translation, IHideFromBreadcrumbs)
+
+    logger.info('Hiding SITE and its translations from breadcrumbs... DONE')

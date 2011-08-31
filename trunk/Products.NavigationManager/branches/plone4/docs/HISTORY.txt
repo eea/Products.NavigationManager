@@ -5,8 +5,6 @@ Changelog
 4.0-dev - (unreleased)
 ----------------------
 
-* TODO: Fix breadcrumbs;
-
 * Cleanup: pylint, pyflakes violations
   [voineali #4285]
 

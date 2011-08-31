@@ -13,6 +13,11 @@
       handler="Products.NavigationManager.upgrades.evolve4.evolve"
       />
 
+    <genericsetup:upgradeStep
+      title="Hide SITE and its translations from breadcrumbs"
+      handler="Products.NavigationManager.upgrades.evolve4.fix_site_breadcrumbs"
+      />
+
     <genericsetup:upgradeDepends
       title="Import all steps from Products.NavigationManager profile"
       import_profile="Products.NavigationManager:default"
