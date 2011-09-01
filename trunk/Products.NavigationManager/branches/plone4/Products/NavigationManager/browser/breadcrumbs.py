@@ -82,4 +82,11 @@ class BreadcrumbsViewlet(PathBarViewlet):
         """
         if IHideBreadcrumbsViewlet.providedBy(self.context):
             return ""
+
+        # Also look in canonical
+        if hasattr(self.context, 'getCanonical'):
+            canonical = self.context.getCanonical()
+            if IHideBreadcrumbsViewlet.providedBy(canonical):
+                return ""
+
         return self.index()
