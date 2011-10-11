@@ -5,6 +5,9 @@ Changelog
 4.0-dev - (unreleased)
 ----------------------
 
+* Feature: Show content icons in navigation portlet only when logged in CMS
+  [demarant]
+
 * Feature: Added an easy way to hide breadcrumbs viewlet by just marking
   object with IHideBreadcrumbsViewlet interface.
   [voineali #4464]
