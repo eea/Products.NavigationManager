@@ -8,7 +8,7 @@ from Acquisition import aq_base
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
 
-from plone.app.layout.navigation.navtree import buildFolderTree
+from Products.NavigationManager.browser.navtree import buildFolderTree
 from plone.app.layout.navigation.interfaces import (
     INavtreeStrategy,
     INavigationQueryBuilder,
@@ -124,10 +124,6 @@ class SectionAwareQueryBuilder(QueryBuilder):
 
     def __call__(self):
         self.query['path']['navtree_start'] = self.navtree_start
-        self.query['is_default_page'] = {
-            'query': [False, True],
-            'operator': 'or'
-        }
         return self.query
 
 class SectionAwareNavStrategy(NavtreeStrategy):
@@ -212,16 +208,6 @@ class NavigationRenderer(Renderer):
         """
         return '/'.join(self.root.getPhysicalPath())
 
-    def fix_defaultpage_position(self, tree):
-        """ Fix default page position
-        """
-        for index, child in enumerate(tree.get('children', [])):
-            if child.get('is_default_page', False):
-                tree['children'].pop(index)
-                tree['children'].insert(0, child)
-                break
-        return tree
-
     def apply_maxChildren(self, tree, context=None):
         """ Apply maxChildren on tree
         """
@@ -284,8 +270,6 @@ class NavigationRenderer(Renderer):
         tree = buildFolderTree(root, obj=self.context,
                                query=queryBuilder(), strategy=strategy)
 
-        tree = self.fix_defaultpage_position(tree)
-
         for child in tree.get('children', []):
             if not child.get('show_children', False):
                 continue
@@ -299,7 +283,6 @@ class NavigationRenderer(Renderer):
 
             # Avoid infinite recursion
             if doc == root:
-                child = self.fix_defaultpage_position(child)
                 tree['children'] = child.get('children', [])
                 break
 

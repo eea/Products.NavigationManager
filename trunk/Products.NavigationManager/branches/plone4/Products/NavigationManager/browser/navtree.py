@@ -5,9 +5,8 @@ from catalog queries.
 from types import StringType
 from plone.app.layout.navigation.navtree import NavtreeStrategyBase
 from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone import utils
 
-def buildFolderTree(context, obj=None, query={},
+def buildFolderTree(context, obj=None, query=None,
                     strategy=NavtreeStrategyBase()):
     """Create a tree structure representing a navigation tree. By default,
     it will create a full "sitemap" tree, rooted at the portal, ordered
@@ -82,14 +81,13 @@ def buildFolderTree(context, obj=None, query={},
     If the 'obj' passed in is a default-page, its parent folder will be
     used for the purposes of selecting the 'currentItem'.
     """
+    if not query:
+        query = {}
 
     portal_url = getToolByName(context, 'portal_url')
     portal_catalog = getToolByName(context, 'portal_catalog')
 
-    showAllParents = strategy.showAllParents
     rootPath = strategy.rootPath
-
-    request = getattr(context, 'REQUEST', {})
 
     # Find the object's path. Use parent folder if context is a default-page
 
@@ -97,8 +95,6 @@ def buildFolderTree(context, obj=None, query={},
     objPhysicalPath = None
     if obj is not None:
         objPhysicalPath = obj.getPhysicalPath()
-        if utils.isDefaultPage(obj, request):
-            objPhysicalPath = objPhysicalPath[:-1]
         objPath = '/'.join(objPhysicalPath)
 
     portalPath = portal_url.getPortalPath()
@@ -144,13 +140,8 @@ def buildFolderTree(context, obj=None, query={},
         if rootObject is not None:
             pruneRoot = not strategy.showChildrenOf(rootObject)
 
-    # Default sorting and threatment of default-pages
-
     if 'sort_on' not in query:
         query['sort_on'] = 'getObjPositionInParent'
-
-    if 'is_default_page' not in query:
-        query['is_default_page'] = False
 
     results = portal_catalog.searchResults(query)
 
@@ -219,6 +210,8 @@ def buildFolderTree(context, obj=None, query={},
                 objPhysicalPath) > len(itemPhysicalPath):
                 isCurrentParent = True
 
+        isDefaultPage = getattr(item, 'is_default_page', False)
+
         relativeDepth = len(itemPhysicalPath) - rootDepth
 
         newNode = {'item': item,
@@ -246,9 +239,15 @@ def buildFolderTree(context, obj=None, query={},
                             nodeAlreadyInserted = True
                             break
                     if not nodeAlreadyInserted:
-                        itemParent['children'].append(newNode)
+                        if isDefaultPage:
+                            itemParent['children'].insert(0, newNode)
+                        else:
+                            itemParent['children'].append(newNode)
                 elif not itemParent.get('_pruneSubtree', False):
-                    itemParent['children'].append(newNode)
+                    if isDefaultPage:
+                        itemParent['children'].insert(0, newNode)
+                    else:
+                        itemParent['children'].append(newNode)
             else:
                 itemPaths[parentPath] = {'children': [newNode]}
 
