@@ -123,6 +123,9 @@ class SectionAwareQueryBuilder(QueryBuilder):
         return len(self.context.getPhysicalPath()) - 1
 
     def __call__(self):
+        mtool = getToolByName(self.context, 'portal_membership')
+        if mtool.isAnonymousUser():
+            self.query['review_state'] = 'published'
         self.query['path']['navtree_start'] = self.navtree_start
         return self.query
 
