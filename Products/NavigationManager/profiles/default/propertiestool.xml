@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<object name="portal_properties">
+ <object name="navtree_properties">
+  <property name="enable_wf_state_filtering" type="boolean">False</property>
+  <property name="wf_states_to_show" type="lines"/>
+  <property name="idsNotToList" type="lines" purge="False">
+   <element value="portal_navigationmanager"/>
+  </property>
+  <property name="bottomLevel" type="int">10</property>
+  <property name="maxChildren" type="int">10</property>
+  <property name="listAllTemplate" type="string">folder_listing</property>
+ </object>
+</object>

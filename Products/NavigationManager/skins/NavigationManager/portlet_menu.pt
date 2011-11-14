@@ -1,0 +1,52 @@
+<html xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:metal="http://xml.zope.org/namespaces/metal"
+  i18n:domain="eea">
+<body>
+
+<div metal:define-macro="portlet"
+  i18n:domain="eea" tal:define="
+  site options/site|nothing;menuid options/menuid;
+  relativeurls options/relativeurls;
+  selectedsubmenuid options/selectedsubmenuid;
+  view context/@@eea_menu;
+  submenu python:view.getSubMenu(site,menuid)
+">
+
+<dl class="portlet" id="portlet-navigation-tree" tal:define="
+  parent python:submenu[0];children python:submenu[1];">
+  <dt class="portletHeader" >
+    <a href="" tal:content="parent/title"
+      tal:attributes="
+        href python:view.getItemUrl(parent['url'], relativeurls);
+        title parent/description;">Menu title</a>
+  </dt>
+
+  <dd class="portletItem">
+    <ul class="portletNavigationTree navTreeLevel2">
+      <tal:block repeat="item children">
+        <li class="navTreeItem visualNoMarker" tal:attributes="
+          id string:level2-${item/id};">
+          <a class="menuItem" tal:attributes="
+            href python:view.getItemUrl(item['url'],relativeurls);
+            title item/description;
+            class python:test(item['id']==selectedsubmenuid, 'navItemLevel2 navItemLevel2current','navItemLevel2');"
+            tal:content="item/title">Menu item</a>
+
+          <ul class="portletNavigationTree navTreeLevel3" tal:condition="item/children">
+            <li tal:repeat="child item/children" tal:attributes="id string:level3-${child/id};">
+            <a class="menuItem" tal:attributes="
+              href python:view.getItemUrl(child['url'],relativeurls);
+              title child/description;
+              class python:test(child['id']==selectedsubmenuid, 'navItemLevel3 navItemLevel3current','navItemLevel3');"
+              tal:content="child/title">Child title</a>
+            </li>
+          </ul>
+        </li>
+      </tal:block>
+    </ul>
+  </dd>
+</dl>
+
+</div>
+</body>
+</html>
