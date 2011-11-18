@@ -1,0 +1,17 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:five="http://namespaces.zope.org/five">
+
+  <include file="skins.zcml" />
+  <include file="profiles.zcml" />
+
+  <include package=".browser" />
+  <include package=".menu" />
+  <include package=".sections" />
+  <include package=".upgrades" />
+
+  <!-- Catalog indexers -->
+  <adapter factory=".catalog.getNavSectionsForIndex" name="navSection" />
+
+</configure>
