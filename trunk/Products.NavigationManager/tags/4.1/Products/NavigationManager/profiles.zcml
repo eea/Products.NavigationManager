@@ -1,0 +1,23 @@
+<configure
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+  xmlns:five="http://namespaces.zope.org/five"
+  i18n_domain="eea">
+
+  <genericsetup:registerProfile
+    name="default"
+    title="EEA Navigation Manager"
+    directory="profiles/default"
+    description="Extension profile for EEA Navigation Manager"
+    provides="Products.GenericSetup.interfaces.EXTENSION"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    />
+
+  <genericsetup:importStep
+    name="navigationmanager_various"
+    title="NavigationManager: miscellaneous import steps"
+    description="Various setup for EEA Navigation Manager"
+    handler="Products.NavigationManager.setuphandlers.setupVarious">
+    <depends name="catalog" />
+  </genericsetup:importStep>
+
+</configure>
