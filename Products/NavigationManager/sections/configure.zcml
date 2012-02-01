@@ -23,7 +23,8 @@
     factory=".adapters.NavigationSections" />
 
   <subscriber
-    for="* zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    for="Products.Archetypes.interfaces.base.IBaseObject
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
     handler=".events.objectNavigationSet"
     />
 
