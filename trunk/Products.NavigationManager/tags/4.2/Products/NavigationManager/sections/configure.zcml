@@ -1,0 +1,31 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope">
+
+  <class class="Products.Archetypes.BaseObject.BaseObject">
+    <implements interface="Products.NavigationManager.sections.interfaces.INavigationSectionPositionable" />
+  </class>
+
+  <adapter
+    for=".interfaces.INavigationSectionPositionable"
+    provides="zope.annotation.interfaces.IAnnotations"
+    factory="zope.annotation.attribute.AttributeAnnotations"
+    />
+
+  <adapter
+    for=".interfaces.INavigationSectionPositionable"
+    provides=".interfaces.INavigationSectionPosition"
+    factory=".adapters.NavigationSectionPosition"
+    />
+
+  <adapter
+    for="zope.interface.Interface"
+    provides=".interfaces.INavigationSections"
+    factory=".adapters.NavigationSections" />
+
+  <subscriber
+    for="Products.Archetypes.interfaces.base.IBaseObject
+         zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+    handler=".events.objectNavigationSet"
+    />
+
+</configure>
