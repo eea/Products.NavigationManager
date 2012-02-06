@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.2-dev - (unreleased)
-----------------------
+4.2 - (2012-02-06)
+------------------
 * Bug fix: Fixed subscriber to be register for IBaseObject instead of * [ghicaale]
 
 4.1 - (2011-11-18)
