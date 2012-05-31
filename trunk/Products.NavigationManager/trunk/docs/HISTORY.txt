@@ -3,10 +3,13 @@ Changelog
 
 4.3-dev - (unreleased)
 ----------------------
+* Bug fix: fixed markup of HISTORY.txt file
+  [ciobabog refs #5231]
 
 4.2 - (2012-02-06)
 ------------------
-* Bug fix: Fixed subscriber to be register for IBaseObject instead of * [ghicaale]
+* Bug fix: Fixed subscriber to be register for IBaseObject instead of *
+  [ghicaale]
 
 4.1 - (2011-11-18)
 ------------------
