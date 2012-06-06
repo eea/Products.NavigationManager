@@ -72,7 +72,11 @@ class BreadcrumbsViewlet(PathBarViewlet):
         while not ISiteRoot.providedBy(parent):
             parent = utils.parent(parent)
                 
-        return parent.absolute_url() + "/" + plt.getPreferredLanguage()
+        lang = ""
+        if plt.getPreferredLanguage() != "en":
+            lang = plt.getPreferredLanguage()     
+                   
+        return parent.absolute_url() + "/" + lang
         
 
     @navigation_root_url.setter
