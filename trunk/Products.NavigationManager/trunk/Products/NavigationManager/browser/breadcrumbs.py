@@ -8,6 +8,7 @@ from Products.CMFPlone.browser.navigation import PhysicalNavigationBreadcrumbs
 from Products.CMFPlone.browser.navigation import get_view_url
 from Products.CMFCore.interfaces import ISiteRoot
 from Acquisition import aq_inner
+from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
 from plone.app.layout.viewlets.common import PathBarViewlet
 from Products.NavigationManager.browser.interfaces import (
@@ -67,9 +68,12 @@ class BreadcrumbsViewlet(PathBarViewlet):
         """ Override navigation root to portal url
         """
         parent = aq_inner(self.context)
+        plt = getToolByName(parent, 'portal_languages')
         while not ISiteRoot.providedBy(parent):
             parent = utils.parent(parent)
-        return parent.absolute_url()
+                
+        return parent.absolute_url() + "/" + plt.getPreferredLanguage()
+        
 
     @navigation_root_url.setter
     def navigation_root_url(self, value):
