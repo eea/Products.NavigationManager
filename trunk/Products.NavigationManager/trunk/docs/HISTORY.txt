@@ -5,6 +5,10 @@ Changelog
 ----------------------
 * Bug fix: fixed markup of HISTORY.txt file
   [ciobabog refs #5231]
+* Bug Fix: Home link in breadcrumbs redirects
+  to the selected language homepage 
+  [prospchr refs #5184]
+  
 
 4.2 - (2012-02-06)
 ------------------
