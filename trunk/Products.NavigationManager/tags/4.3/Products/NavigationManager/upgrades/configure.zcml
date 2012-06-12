@@ -1,0 +1,28 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+  i18n_domain="eea">
+
+  <genericsetup:upgradeSteps
+    source="*"
+    destination="4.0"
+    profile="Products.NavigationManager:default">
+
+    <genericsetup:upgradeStep
+      title="Update portal_properties for NavigationManager. Remove deprecated 'is_empty' catalog index/metadata"
+      handler="Products.NavigationManager.upgrades.evolve4.evolve"
+      />
+
+    <genericsetup:upgradeStep
+      title="Hide SITE and its translations from breadcrumbs. Hide breadcrumbs viewlet on front-page"
+      handler="Products.NavigationManager.upgrades.evolve4.fix_site_breadcrumbs"
+      />
+
+    <genericsetup:upgradeDepends
+      title="Import all steps from Products.NavigationManager profile"
+      import_profile="Products.NavigationManager:default"
+      />
+
+  </genericsetup:upgradeSteps>
+
+</configure>

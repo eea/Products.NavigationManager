@@ -1,0 +1,64 @@
+Changelog
+=========
+
+4.3 - (2012-06-12)
+------------------
+* Bug fix: fixed markup of HISTORY.txt file
+  [ciobabog refs #5231]
+* Bug Fix: Home link in breadcrumbs redirects
+  to the selected language homepage 
+  [prospchr refs #5184]
+
+4.2 - (2012-02-06)
+------------------
+* Bug fix: Fixed subscriber to be register for IBaseObject instead of *
+  [ghicaale]
+
+4.1 - (2011-11-18)
+------------------
+* Rerelease broken egg
+
+4.0 - (2011-11-18)
+------------------
+* Feature: Show content icons in navigation portlet only when logged in CMS
+  [demarant]
+* Feature: Added an easy way to hide breadcrumbs viewlet by just marking
+  object with IHideBreadcrumbsViewlet interface.
+  [voineali #4464]
+* Feature: Enabled breadcrumbs viewlet
+  [voineali #4464]
+* Cleanup: pylint, pyflakes violations
+  [voineali #4285]
+* Feature: Dropped is_empty functionality
+  [voineali #4376]
+* Feature: Added upgrade steps
+  [voineali #4392]
+* Feature: Plone 4.x compatible release
+  [voineali #4285]
+
+0.3-dev - (unreleased)
+----------------------
+* Cleanup: of pyflakes violations
+  [ichimdav #4141]
+* Bug fix: Removed deprecated ToolInit param product_name
+  [voineali #4139]
+* Bug fix: Fixed DeprecationWarning: CMFCorePermissions
+  [voineali #4139]
+* Bug fix: Fixed DeprecationWarning: PloneUtilities
+  [voineali #4139]
+* Bug fix: Fixed DeprecationWarning: CustomizationPolicies
+  [voineali #4139]
+
+0.2 - (2011-02-23)
+------------------
+* Bug fix: fixes install method
+  [ichimdav #2931]
+
+0.1 - (2011-02-22)
+------------------
+* Feature: eggified product to Products.NavigationManager
+  [ichimdav #2931]
+* Change: fixed a lot of the errors and warnings that pylint gave
+  [ichimdav #4140]
+* Initial release
+
