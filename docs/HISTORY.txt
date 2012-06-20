@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.4-dev - (unreleased)
-----------------------
+4.4 - (2012-06-20)
+------------------
 * Bug fix: don't trigger Unauthorized error in portlet navigation
   [tiberich]
 
