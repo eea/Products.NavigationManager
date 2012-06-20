@@ -21,6 +21,7 @@ from plone.app.portlets.portlets.navigation import Renderer
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
 from Products.NavigationManager.sections.interfaces import INavigationSections
+from AccessControl.unauthorized import Unauthorized
 
 def getApplicationRoot(obj):
     """ Application Root
@@ -282,7 +283,10 @@ class NavigationRenderer(Renderer):
                 continue
 
             brain = child.get('item', None)
-            doc = brain.getObject()
+            try:
+                doc = brain.getObject()
+            except Unauthorized:
+                continue
 
             # Avoid infinite recursion
             if doc == root:
