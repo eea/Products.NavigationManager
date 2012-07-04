@@ -1,4 +1,4 @@
-<tal:block i18n:domain="plone">
+<tal:block i18n:domain="eea">
 <dl class="portlet portletNavigationTree"
   tal:define="root view/navigation_root">
 
