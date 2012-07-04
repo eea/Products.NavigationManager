@@ -3,6 +3,8 @@ Changelog
 
 4.5-dev - (unreleased)
 ----------------------
+* Bug Fix: Fixed i18n:domain in *.pt 
+  [prospchr refs #5162]
 
 4.4 - (2012-06-20)
 ------------------

@@ -3,7 +3,7 @@
                     children options/children | nothing;
                     bottomLevel options/bottomLevel | nothing;
                     isAnon portal_state/anonymous;"
-            i18n:domain="plone">
+            i18n:domain="eea">
 
 <metal:main define-macro="nav_main">
 <tal:navitem repeat="node children">
