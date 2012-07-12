@@ -23,8 +23,8 @@ class NavigationMenu(BrowserSubMenuItem):
     """
     implements(INavigationSubMenuItem)
 
-    title = _(u'label_navigation_menu', default=u'Navigation')
-    description = _(u'title_navigation_menu', default=u'Navigation actions')
+    title = _(u'Navigation')
+    description = _(u'Navigation actions')
     submenuId = 'eea_navigation'
 
     order = 5
