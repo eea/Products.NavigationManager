@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+  lang="en"
+  metal:use-macro="here/main_template/macros/master"
+  i18n:domain="eea">
+
+<head>
+  <metal:block fill-slot="top_slot"
+    tal:define="dummy python:request.set('disable_border',1)" />
+</head>
+
+<body>
+<metal:main fill-slot="main">
+  <metal:sitemap-content metal:define-macro="sitemap-content">
+    <h1 i18n:translate="">Site map</h1>
+
+  <p class="documentDescription"
+    i18n:translate="">
+  An overview of the available content on this site. Keep the pointer still
+  over an item for a few seconds to get its description.
+  </p>
+
+  <ul id="portal-sitemap"
+    class=""
+    tal:define="site options/site|request/site|here/navigationmanager_site|string:default;
+      navigationmanager nocall:here/portal_navigationmanager|nothing;
+      portal_nodes python:navigationmanager.getTree(site);"
+  tal:condition="portal_nodes">
+    <tal:tabs tal:repeat="node portal_nodes">
+    <li tal:define="tab nocall:node/item" tal:attributes="id string:portaltab-${tab/id};" style="float:left;width:20%;margin-left:1em;">
+    <a href=""
+      tal:content="tab/title"
+      tal:attributes="href tab/url;
+        title tab/description|nothing" style="font-size:1.4em;font-weight:bold;">
+    Tab Name
+    </a>
+    <ul class="" tal:condition="node/children" >
+      <tal:tabs tal:repeat="node node/children"><li tal:define="tab nocall:node/item" tal:attributes="id string:portaltab-${tab/id};
+        ">
+      <a href=""
+      tal:define="linkText tab/title"
+        tal:content="linkText"
+          tal:attributes="href tab/url;
+            title tab/description|nothing">
+      Tab Name
+      </a></li>
+      </tal:tabs>
+    </ul>
+    </li>
+    </tal:tabs>
+  </ul>
+</metal:sitemap-content>
+</metal:main>
+</body>
+</html>

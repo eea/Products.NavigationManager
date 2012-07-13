@@ -1,0 +1,16 @@
+<tal:block i18n:domain="eea">
+<dl class="portlet portletNavigationTree"
+  tal:define="root view/navigation_root">
+
+  <dt class="portletHeader" id="firstHeader">
+    <a tal:attributes="href root/absolute_url"
+      tal:content="root/pretty_title_or_id">Portlet title</a>
+  </dt>
+
+  <tal:sections repeat="section view/sections">
+    <tal:section replace="structure python:view.createNavSection(section.value, section.title)">
+      Navigation section
+    </tal:section>
+  </tal:sections>
+</dl>
+</tal:block>
