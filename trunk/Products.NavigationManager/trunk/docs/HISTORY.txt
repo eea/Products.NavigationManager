@@ -6,7 +6,7 @@ Changelog
 
 4.5 - (2012-07-13)
 ------------------
-* Bug Fix: Fixed i18n:domain in *.pt 
+* Bug Fix: Fixed i18n:domain in .pt 
   [prospchr refs #5162]
 
 4.4 - (2012-06-20)
@@ -24,7 +24,7 @@ Changelog
 
 4.2 - (2012-02-06)
 ------------------
-* Bug fix: Fixed subscriber to be register for IBaseObject instead of *
+* Bug fix: Fixed subscriber to be register for IBaseObject instead of "star"
   [ghicaale]
 
 4.1 - (2011-11-18)
