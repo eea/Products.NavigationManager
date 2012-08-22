@@ -3,6 +3,8 @@ Changelog
 
 4.6-dev - (unreleased)
 ----------------------
+* Bug fix: fix menu generation when URL contains escape characters
+  [tiberich refs #4190]
 
 4.5 - (2012-07-13)
 ------------------
