@@ -66,7 +66,7 @@ class NavigationMenuItems(BrowserMenu):
         """ Return menu items
         """
         url = context.absolute_url()
-        action = url + '/@@setNavigationSection?section=%s'
+        action = url + '/@@setNavigationSection?section='
         exclude = (bool(context.exclude_from_nav())
                    if hasattr(context, 'exclude_from_nav') else False)
 
@@ -74,7 +74,7 @@ class NavigationMenuItems(BrowserMenu):
             {
                 'title': 'Reset',
                 'description': '',
-                'action': action % 'reset',
+                'action': action + 'reset',
                 'selected': False,
                 'icon': None,
                 'extra': {'id': 'reset', 'separator': None, 'class': ''},
@@ -83,7 +83,7 @@ class NavigationMenuItems(BrowserMenu):
             {
                 'title': 'Exclude',
                 'description': '',
-                'action': action % 'exclude',
+                'action': action + 'exclude',
                 'selected': exclude,
                 'icon': None,
                 'extra': {
@@ -116,7 +116,7 @@ class NavigationMenuItems(BrowserMenu):
             left.append({
                 'title': section.title,
                 'description': '',
-                'action': action % section.value,
+                'action': action + section.value,
                 'selected': selected,
                 'icon': None,
                 'extra': {
@@ -151,7 +151,7 @@ class NavigationMenuItems(BrowserMenu):
             right.append({
                 'title': section.title,
                 'description': '',
-                'action': action % section.value,
+                'action': action + section.value,
                 'selected': selected,
                 'icon': None,
                 'extra': {
