@@ -1,0 +1,43 @@
+<configure
+  xmlns:plone="http://namespaces.plone.org/plone"
+  xmlns:browser="http://namespaces.zope.org/browser">
+
+  <plone:portletRenderer
+    portlet="plone.app.portlets.portlets.navigation.INavigationPortlet"
+    class=".browser.navigation.NavigationRenderer"
+    />
+
+
+  <!-- Breadcrumbs -->
+  <browser:page
+    for="Products.CMFCore.interfaces.ISiteRoot"
+    name="breadcrumbs_view"
+    class=".browser.breadcrumbs.Breadcrumbs"
+    permission="zope.Public"
+    allowed_attributes="breadcrumbs"
+    />
+
+  <browser:page
+    for="plone.app.layout.navigation.interfaces.INavigationRoot"
+    name="breadcrumbs_view"
+    class=".browser.breadcrumbs.Breadcrumbs"
+    permission="zope.Public"
+    allowed_attributes="breadcrumbs"
+    />
+
+  <browser:page
+    for="OFS.interfaces.IItem"
+    name="breadcrumbs_view"
+    class=".browser.breadcrumbs.Breadcrumbs"
+    permission="zope.Public"
+    allowed_attributes="breadcrumbs"
+    />
+
+  <browser:viewlet
+    name="plone.path_bar"
+    manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+    class=".browser.breadcrumbs.BreadcrumbsViewlet"
+    permission="zope2.View"
+    />
+
+</configure>
