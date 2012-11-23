@@ -322,7 +322,7 @@ class NavigationRenderer(Renderer):
         try:
             res = self.recurse(children=children, level=1,
                                bottomLevel=self.bottomLevel)
-        except:
+        except RuntimeError:
             logger.debug("Recurrsion error in nav portlet for %s" 
                          %s self.context)
 
