@@ -3,6 +3,9 @@ Changelog
 
 4.8-dev - (unreleased)
 ----------------------
+* Bug fix: don't crash with a recursion error; this is a temporary fix
+  until we can find the real cause that this happens only for Assessments
+  [tiberich #9950]
 
 4.7 - (2012-08-27)
 ------------------
