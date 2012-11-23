@@ -23,6 +23,11 @@ from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
 from Products.NavigationManager.sections.interfaces import INavigationSections
 from AccessControl.unauthorized import Unauthorized
 
+import logging
+
+logger = logging.getLogger("Products.NavigationManager")
+
+
 def getApplicationRoot(obj):
     """ Application Root
     """
@@ -313,8 +318,15 @@ class NavigationRenderer(Renderer):
         children = [child for child in data.get('children', [])
                     if child.get('navSection', '') == section]
 
-        return self.recurse(children=children, level=1,
-                            bottomLevel=self.bottomLevel)
+        res = []
+        try:
+            res = self.recurse(children=children, level=1,
+                               bottomLevel=self.bottomLevel)
+        except:
+            logger.debug("Recurrsion error in nav portlet for %s" 
+                         %s self.context)
+
+        return res
 
     def createNavSection(self, section='default', label='Menu'):
         """ Render navigations section
