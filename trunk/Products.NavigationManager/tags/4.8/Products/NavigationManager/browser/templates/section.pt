@@ -1,0 +1,19 @@
+<tal:section define="
+  section section|options/section|string:default;
+  sectionTitle sectionTitle|options/sectionTitle|string:Menu;"
+  condition="python:view.display(section)">
+
+  <dt class="portletSubMenuHeader">
+    <span class="title" i18n:translate=""
+      tal:content="sectionTitle">Menu 1</span>
+  </dt>
+
+  <dd class="portletItem lastItem">
+    <ul class="navTree navTreeLevel0">
+      <li tal:replace="structure python:view.createNavTree(section=section)">
+        SUBTREE
+      </li>
+    </ul>
+  </dd>
+
+</tal:section>
