@@ -324,7 +324,7 @@ class NavigationRenderer(Renderer):
                                bottomLevel=self.bottomLevel)
         except RuntimeError:
             logger.debug("Recurrsion error in nav portlet for %s" 
-                         %s self.context)
+                         % self.context)
 
         return res
 
