@@ -1,6 +1,9 @@
 Changelog
 =========
 
+4.9-dev - (unreleased)
+----------------------
+
 4.8 - (2012-11-26)
 ------------------
 * Bug fix: don't crash with a recursion error; this is a temporary fix
