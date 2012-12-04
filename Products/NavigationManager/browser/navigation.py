@@ -318,15 +318,8 @@ class NavigationRenderer(Renderer):
         children = [child for child in data.get('children', [])
                     if child.get('navSection', '') == section]
 
-        res = []
-        try:
-            res = self.recurse(children=children, level=1,
+        return self.recurse(children=children, level=1,
                                bottomLevel=self.bottomLevel)
-        except RuntimeError:
-            logger.debug("Recurrsion error in nav portlet for %s" 
-                         % self.context)
-
-        return res
 
     def createNavSection(self, section='default', label='Menu'):
         """ Render navigations section
