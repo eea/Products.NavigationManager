@@ -1,8 +1,8 @@
 Changelog
 =========
 
-4.9-dev - (unreleased)
-----------------------
+4.9 - (2013-01-15)
+------------------
 * Bug fix: fix recursion error for assessments
   [tiberich #9950]
 
