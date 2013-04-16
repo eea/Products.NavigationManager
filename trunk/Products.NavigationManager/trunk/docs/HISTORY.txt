@@ -3,6 +3,9 @@ Changelog
 
 5.0-dev - (unreleased)
 ----------------------
+* Change: import BrowserMenu related logic from zope.browsermenu instead of 
+  zope.app.publisher to avoid errors with current versions of Plone
+  [ichimdav]
 
 4.9 - (2013-01-15)
 ------------------

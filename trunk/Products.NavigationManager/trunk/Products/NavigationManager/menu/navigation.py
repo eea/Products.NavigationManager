@@ -4,8 +4,8 @@ from zope.event import notify
 from zope.interface import implements
 from zope.component import getMultiAdapter, queryAdapter
 from zope.lifecycleevent import ObjectModifiedEvent, Attributes
-from zope.app.publisher.browser.menu import BrowserMenu
-from zope.app.publisher.browser.menu import BrowserSubMenuItem
+from zope.browsermenu.menu import BrowserMenu
+from zope.browsermenu.menu import BrowserSubMenuItem
 from plone.app.contentmenu import PloneMessageFactory as _
 
 from AccessControl import getSecurityManager
