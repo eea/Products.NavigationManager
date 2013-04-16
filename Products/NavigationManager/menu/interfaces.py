@@ -1,8 +1,8 @@
 """ Menu interfaces
 """
 
-from zope.app.publisher.interfaces.browser import IBrowserSubMenuItem
-from zope.app.publisher.interfaces.browser import IBrowserMenu
+from zope.browsermenu.interfaces import IBrowserSubMenuItem
+from zope.browsermenu.interfaces import IBrowserMenu
 
 class INavigationSubMenuItem(IBrowserSubMenuItem):
     """The menu item linking to the "Navigation" menu.
