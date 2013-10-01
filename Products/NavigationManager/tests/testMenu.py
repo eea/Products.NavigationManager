@@ -2,7 +2,7 @@
 """
 import unittest
 from Products.NavigationManager.tests.base import NavigationManagerTestCase
-from zope.app.component.hooks import setSite
+from zope.component.hooks import setSite
 from Products.NavigationManager.browser import menu
 
 class TestMenu(NavigationManagerTestCase):
