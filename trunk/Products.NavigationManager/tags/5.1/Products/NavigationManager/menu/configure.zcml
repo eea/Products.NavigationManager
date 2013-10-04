@@ -1,0 +1,30 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  i18n_domain="eea">
+
+  <adapter
+    for="* *"
+    name="eea.contentmenu.navigation"
+    factory=".navigation.NavigationMenu"
+    provides="plone.app.contentmenu.interfaces.IContentMenuItem">
+    This adapter adds a new menu called "Navigation" in the content menu near
+    "Actions", "Display"...
+  </adapter>
+
+  <browser:menu
+    id="eea_navigation"
+    title="Insert exclude/default + navigation sections"
+    class=".navigation.NavigationMenuItems">
+    This is the "Navigation" menu (menu items)
+  </browser:menu>
+
+  <browser:page
+    for="*"
+    name="setNavigationSection"
+    permission="zope.Public"
+    class=".navigation.SetNavigationSection">
+    Helper view to be used within "Navigation" menu actions
+  </browser:page>
+
+</configure>
