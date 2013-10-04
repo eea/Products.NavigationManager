@@ -4,12 +4,12 @@ Changelog
 5.1-dev - (unreleased)
 ----------------------
 * Change: updated zope imports with the versions that require minimum Plone 4.1
-  for Products.NavigationManager 
+  for Products.NavigationManager
   [ichimdav refs #15651]
 
 5.0 - (2013-04-17)
 ------------------
-* Change: import BrowserMenu related logic from zope.browsermenu instead of 
+* Change: import BrowserMenu related logic from zope.browsermenu instead of
   zope.app.publisher to avoid errors with current versions of Plone
   [ichimdav]
 
@@ -34,7 +34,7 @@ Changelog
 
 4.5 - (2012-07-13)
 ------------------
-* Bug Fix: Fixed i18n:domain in .pt 
+* Bug Fix: Fixed i18n:domain in .pt
   [prospchr refs #5162]
 
 4.4 - (2012-06-20)
@@ -47,7 +47,7 @@ Changelog
 * Bug fix: fixed markup of HISTORY.txt file
   [ciobabog refs #5231]
 * Bug Fix: Home link in breadcrumbs redirects
-  to the selected language homepage 
+  to the selected language homepage
   [prospchr refs #5184]
 
 4.2 - (2012-02-06)
