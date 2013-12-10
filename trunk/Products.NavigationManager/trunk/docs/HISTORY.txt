@@ -1,6 +1,9 @@
 Changelog
 =========
 
+5.3-dev - (unreleased)
+----------------------
+
 5.2 - (2013-12-10)
 ------------------
 * Bug fix: added the needed class for the menu to display the accordion 
