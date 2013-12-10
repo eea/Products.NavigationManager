@@ -1,0 +1,56 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser">
+
+  <interface interface="Products.NavigationManager.browser.interfaces.IHideBreadcrumbsViewlet" />
+
+  <class class="Products.NavigationManager.NavigationItem.NavigationItem">
+    <implements interface=".interfaces.INavigationItem" />
+  </class>
+
+  <browser:page
+    name="portal_tabs_view"
+    for="OFS.interfaces.IItem"
+    class=".navigation.PortalNavigationTabs"
+    permission="zope.Public"
+    allowed_attributes="topLevelTabs"
+    />
+
+  <browser:page
+    for="*"
+    name="eea_menu"
+    class=".menu.Menu"
+    permission="zope.Public"
+    allowed_interface=".interfaces.IMenu"
+    />
+
+  <browser:page
+    for=".interfaces.INavigationItem"
+    name="plone"
+    class=".ploneview.NavigationRootPlone"
+    permission="zope.Public"
+    allowed_interface="Products.CMFPlone.browser.interfaces.IPlone"
+    />
+
+  <adapter
+    factory=".navigation.SectionAwareNavStrategy"
+    for="Products.Archetypes.interfaces.base.IBaseObject
+         plone.app.portlets.portlets.navigation.INavigationPortlet"
+    provides="plone.app.layout.navigation.interfaces.INavtreeStrategy"
+    />
+
+  <adapter
+    factory=".navigation.SectionAwareQueryBuilder"
+    for="Products.Archetypes.interfaces.base.IBaseObject
+         plone.app.portlets.portlets.navigation.INavigationPortlet"
+    provides="plone.app.layout.navigation.interfaces.INavigationQueryBuilder"
+    />
+
+  <class class=".navigation.ListAllNode">
+    <allow attributes="Title portal_type getURL getRemoteUrl Creator review_state Description getUrl UID"/>
+  </class>
+
+  <adapter for="* zope.publisher.interfaces.browser.IBrowserRequest .navigation.ListAllNode"
+    factory="plone.app.layout.icons.icons.CatalogBrainContentIcon"
+    provides="plone.app.layout.icons.interfaces.IContentIcon" />
+
+</configure>

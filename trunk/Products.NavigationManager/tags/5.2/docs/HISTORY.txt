@@ -1,0 +1,111 @@
+Changelog
+=========
+
+5.2 - (2013-12-10)
+------------------
+* Bug fix: added the needed class for the menu to display the accordion 
+  font icons
+  [ichimdav refs #17631]
+
+5.1 - (2013-10-04)
+------------------
+* Change: updated zope imports with the versions that require minimum Plone 4.1
+  for Products.NavigationManager
+  [ichimdav refs #15651]
+
+5.0 - (2013-04-17)
+------------------
+* Change: import BrowserMenu related logic from zope.browsermenu instead of
+  zope.app.publisher to avoid errors with current versions of Plone
+  [ichimdav]
+
+4.9 - (2013-01-15)
+------------------
+* Bug fix: fix recursion error for assessments
+  [tiberich #9950]
+
+4.8 - (2012-11-26)
+------------------
+* Bug fix: don't crash with a recursion error; this is a temporary fix
+  until we can find the real cause that this happens only for Assessments
+  [tiberich #9950]
+
+4.7 - (2012-08-27)
+------------------
+
+4.6 - (2012-08-27)
+------------------
+* Bug fix: fix menu generation when URL contains escape characters
+  [tiberich refs #4190]
+
+4.5 - (2012-07-13)
+------------------
+* Bug Fix: Fixed i18n:domain in .pt
+  [prospchr refs #5162]
+
+4.4 - (2012-06-20)
+------------------
+* Bug fix: don't trigger Unauthorized error in portlet navigation
+  [tiberich]
+
+4.3 - (2012-06-12)
+------------------
+* Bug fix: fixed markup of HISTORY.txt file
+  [ciobabog refs #5231]
+* Bug Fix: Home link in breadcrumbs redirects
+  to the selected language homepage
+  [prospchr refs #5184]
+
+4.2 - (2012-02-06)
+------------------
+* Bug fix: Fixed subscriber to be register for IBaseObject instead of "star"
+  [ghicaale]
+
+4.1 - (2011-11-18)
+------------------
+* Rerelease broken egg
+
+4.0 - (2011-11-18)
+------------------
+* Feature: Show content icons in navigation portlet only when logged in CMS
+  [demarant]
+* Feature: Added an easy way to hide breadcrumbs viewlet by just marking
+  object with IHideBreadcrumbsViewlet interface.
+  [voineali #4464]
+* Feature: Enabled breadcrumbs viewlet
+  [voineali #4464]
+* Cleanup: pylint, pyflakes violations
+  [voineali #4285]
+* Feature: Dropped is_empty functionality
+  [voineali #4376]
+* Feature: Added upgrade steps
+  [voineali #4392]
+* Feature: Plone 4.x compatible release
+  [voineali #4285]
+
+0.3-dev - (unreleased)
+----------------------
+* Cleanup: of pyflakes violations
+  [ichimdav #4141]
+* Bug fix: Removed deprecated ToolInit param product_name
+  [voineali #4139]
+* Bug fix: Fixed DeprecationWarning: CMFCorePermissions
+  [voineali #4139]
+* Bug fix: Fixed DeprecationWarning: PloneUtilities
+  [voineali #4139]
+* Bug fix: Fixed DeprecationWarning: CustomizationPolicies
+  [voineali #4139]
+
+0.2 - (2011-02-23)
+------------------
+* Bug fix: fixes install method
+  [ichimdav #2931]
+
+0.1 - (2011-02-22)
+------------------
+* Feature: eggified product to Products.NavigationManager
+  [ichimdav #2931]
+* Change: fixed a lot of the errors and warnings that pylint gave
+  [ichimdav #4140]
+* Initial release
+
