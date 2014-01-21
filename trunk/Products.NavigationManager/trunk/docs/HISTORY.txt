@@ -6,7 +6,7 @@ Changelog
 
 5.2 - (2013-12-10)
 ------------------
-* Bug fix: added the needed class for the menu to display the accordion 
+* Bug fix: added the needed class for the menu to display the accordion
   font icons
   [ichimdav refs #17631]
 
