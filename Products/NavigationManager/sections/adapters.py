@@ -25,7 +25,7 @@ class NavigationSectionPosition(object):
         annotations = IAnnotations(context)
         mapping = annotations.get(KEY)
         if mapping is None:
-            section =  { 'section': None }
+            section = {'section': None}
             mapping = annotations[KEY] = PersistentDict(section)
         self.mapping = mapping
 

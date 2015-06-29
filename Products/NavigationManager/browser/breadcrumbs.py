@@ -71,13 +71,13 @@ class BreadcrumbsViewlet(PathBarViewlet):
         plt = getToolByName(parent, 'portal_languages')
         while not ISiteRoot.providedBy(parent):
             parent = utils.parent(parent)
-                
+
         lang = ""
         if plt.getPreferredLanguage() != "en":
-            lang = plt.getPreferredLanguage()     
-                   
+            lang = plt.getPreferredLanguage()
+
         return parent.absolute_url() + "/" + lang
-        
+
 
     @navigation_root_url.setter
     def navigation_root_url(self, value):

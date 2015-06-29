@@ -29,7 +29,7 @@ class TestMenu(NavigationManagerTestCase):
         """
         m = menu.Menu(self.pubrootonlyfolders['pubtest1-2'],
                       self.portal.REQUEST)
-        path = [ folder['id'] for folder in m.getPath()]
+        path = [folder['id'] for folder in m.getPath()]
         self.assertEquals(path, ['Members', 'test_user_1_',
                                  'pubrootonlyfolders'])
 

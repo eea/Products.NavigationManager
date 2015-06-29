@@ -43,8 +43,8 @@ class NavigationItem(ATFolder):
         return (self.getId() == tabselected) or (
             tabselected == 'default') and myUrl == url
 
-    def getTree(self, local = False, tabselected='default',
-                language = None, recursive=True):
+    def getTree(self, local=False, tabselected='default',
+                language=None, recursive=True):
         """ Returns a list  of menu items objects from the root of this
             menu manager. Useful to generate top navigation like portal tabs.
         """
@@ -81,10 +81,10 @@ class NavigationItem(ATFolder):
                         continue
                     n = translation
 
-            result.append({'item': { 'title': n.Title(),
-                                     'id' : n.getId(),
-                                     'description' : n.Description(),
-                                     'url' : n.getUrl() },
+            result.append({'item': {'title': n.Title(),
+                                    'id' : n.getId(),
+                                    'description' : n.Description(),
+                                    'url' : n.getUrl()},
                            'children': children,
                            'selected': selected,
                            })

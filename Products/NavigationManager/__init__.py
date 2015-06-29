@@ -22,13 +22,13 @@ def initialize(context):
     # Initialize portal tools
     cmfutils.ToolInit(
         PROJECTNAME +' Tools',
-        tools = (NavigationManager.NavigationManager,),
+        tools=(NavigationManager.NavigationManager,),
         icon='tool.gif'
     ).initialize(context)
 
     cmfutils.ContentInit(
         PROJECTNAME + ' Content',
-        content_types = content_types,
-        permission = "Add portal content",
-        extra_constructors = constructors,
-        fti = ftis).initialize(context)
+        content_types=content_types,
+        permission="Add portal content",
+        extra_constructors=constructors,
+        fti=ftis).initialize(context)
