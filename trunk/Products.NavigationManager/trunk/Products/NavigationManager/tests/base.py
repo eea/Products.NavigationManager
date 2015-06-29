@@ -18,7 +18,7 @@ def setup_navigationmanager():
     fiveconfigure.debug_mode = False
 
 setup_navigationmanager()
-PloneTestCase.setupPloneSite(extension_profiles = [
+PloneTestCase.setupPloneSite(extension_profiles=[
     'Products.NavigationManager:default',
 ])
 

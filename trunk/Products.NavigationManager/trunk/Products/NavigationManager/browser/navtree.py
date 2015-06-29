@@ -108,7 +108,7 @@ def buildFolderTree(context, obj=None, query=None,
         query['path'] = rootPath
     elif rootPath is None:
         pathQuery = query['path']
-        if type(pathQuery) == StringType:
+        if isinstance(pathQuery, StringType):
             rootPath = pathQuery
         else:
             # Adjust for the fact that in a 'navtree' query, the actual path

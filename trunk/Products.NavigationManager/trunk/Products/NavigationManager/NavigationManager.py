@@ -24,7 +24,7 @@ class NavigationManager(UniqueObject, BaseFolder):
         request = self.REQUEST
         actualUrl = request.get('ACTUAL_URL')
         local = False
-        if actualUrl.startswith( portal.absolute_url() ):
+        if actualUrl.startswith(portal.absolute_url()):
             local = True
 
         fallback = getattr(self, 'navigationmanager_fallback', False)

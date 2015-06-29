@@ -54,7 +54,7 @@ class Menu(BrowserView):
 
         # add the parent node as first node
         if parent_node:
-            result.append(self.buildNode(parent_node,'dummyid') )
+            result.append(self.buildNode(parent_node, 'dummyid'))
 
         # Assign an empty list to index 1 for the loop below
         result.append([])
@@ -66,7 +66,7 @@ class Menu(BrowserView):
             # level 3 menu
             daycare = node['children']
             node['children'] = \
-                    [ self.buildNode(childe, menuid) for childe in daycare ]
+                    [self.buildNode(childe, menuid) for childe in daycare]
 
             result[1].append(node)
 
@@ -95,13 +95,13 @@ class Menu(BrowserView):
             bpath = self.createObjPathFromObject(self.context)
         else:
             #find menuitem with id=menuid
-            menubrains = catalog(getId = menuid,
-                               portal_type = 'NavigationItem',
-                               Language = language)
+            menubrains = catalog(getId=menuid,
+                               portal_type='NavigationItem',
+                               Language=language)
             if not menubrains:
-                menubrains = catalog(getId = menuid,
-                               portal_type = 'NavigationItem',
-                               Language = 'en')
+                menubrains = catalog(getId=menuid,
+                               portal_type='NavigationItem',
+                               Language='en')
 
             if menubrains:
                 menuobj = menubrains[0].getObject()
@@ -121,10 +121,10 @@ class Menu(BrowserView):
         # create first item Home (=first item of navmanager)
         # and insert on start of path
         if siteobj is not None:
-            home = { 'id' : siteobj.getId(),
-                     'url' : siteobj.getUrl(),
-                     'title' : home_title,
-                     'description' : siteobj.Description()}
+            home = {'id' : siteobj.getId(),
+                    'url' : siteobj.getUrl(),
+                    'title' : home_title,
+                    'description' : siteobj.Description()}
             bpath.insert(0, home)
 
         return bpath
@@ -138,7 +138,7 @@ class Menu(BrowserView):
         path = []
         while menuobj and menuobj.getId() != site and \
                 menuobj.getId() != 'portal_navigationmanager':
-            path.insert(0, { 'id' : menuobj.getId(),
+            path.insert(0, {'id' : menuobj.getId(),
                           'url' : menuobj.getUrl(),
                           'title' : menuobj.Title(),
                           'description' : menuobj.Description()})
@@ -158,7 +158,7 @@ class Menu(BrowserView):
 
         # if we are outside plone we don't have portal_type
         while obj and getattr(obj, 'portal_type', 'Plone Site') != 'Plone Site':
-            path.insert(0, { 'id' : obj.getId(),
+            path.insert(0, {'id' : obj.getId(),
                           'url' : obj.absolute_url(),
                           'title' : obj.Title(),
                           'description' : obj.Description()})
@@ -175,7 +175,7 @@ class Menu(BrowserView):
 
         parent = aq_parent(aq_inner(self.context))
         plone_view = getMultiAdapter((self.context, self.request),
-                name = "plone")
+                name="plone")
         if hasattr(parent, 'getCanonical') and \
                 parent.getCanonical().getId() == 'SITE' and \
                 plone_view.isDefaultPageInFolder():
@@ -188,17 +188,17 @@ class Menu(BrowserView):
         children = menuitem['children']
         m = menuitem['item']
 
-        return  { 'id' : m['id'],
+        return  {'id' : m['id'],
                 'url' : m['url'],
                 'title' : m['title'],
                 'description' : m['description'],
-                'currentItem' : m['id'] == menuid ,
-                'children' : children }
+                'currentItem' : m['id'] == menuid,
+                'children' : children}
 
     def getItemUrl(self, url, relative='no'):
         ''' given a url, it returns absolute or relative url '''
         if relative == 'yes':
-            httpfound = url.find('http')>-1
+            httpfound = url.find('http') > -1
             # find first slash after the http
             idx1 = url.find('/', 9)
             if httpfound and idx1 > -1:
