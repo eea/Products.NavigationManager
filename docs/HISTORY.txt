@@ -1,8 +1,8 @@
 Changelog
 =========
 
-5.4.dev0 - (unreleased)
------------------------
+5.4 - (2015-09-22)
+------------------
 * Bug fix: Safely get 'interface' attr from request object in order to avoid
   AttributeError: interface exceptions
   [voineali refs #28998]
