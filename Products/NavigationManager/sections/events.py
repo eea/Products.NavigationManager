@@ -9,6 +9,6 @@ def objectNavigationSet(obj, event):
     If true, catalog is updated.
     """
     for desc in event.descriptions:
-        if desc.interface == INavigationSectionPosition:
+        if getattr(desc, 'interface', None) == INavigationSectionPosition:
             obj.reindexObject()
             break
