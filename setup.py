@@ -1,7 +1,7 @@
 """ Installer
 """
-from setuptools import setup, find_packages
 import os
+from setuptools import setup, find_packages
 
 NAME = 'Products.NavigationManager'
 PATH = NAME.split('.') + ['version.txt']

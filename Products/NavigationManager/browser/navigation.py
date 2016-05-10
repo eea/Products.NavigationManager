@@ -1,29 +1,27 @@
 """ Navigation
 """
-from zope.interface import implements
-from zope.component import getMultiAdapter, queryAdapter
-from zope.schema.vocabulary import SimpleTerm
-
+import logging
 from Acquisition import aq_base
+
+from zope.interface import implements
+
+from AccessControl.unauthorized import Unauthorized
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
-
+from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.NavigationManager.browser.navtree import buildFolderTree
+from Products.NavigationManager.sections.interfaces import INavigationSections
 from plone.app.layout.navigation.interfaces import (
     INavtreeStrategy,
     INavigationQueryBuilder,
     INavigationRoot,
 )
-
 from plone.app.portlets.portlets.navigation import NavtreeStrategy
 from plone.app.portlets.portlets.navigation import QueryBuilder
 from plone.app.portlets.portlets.navigation import Renderer
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
-from Products.CMFPlone.browser.navigation import CatalogNavigationTabs
-from Products.NavigationManager.sections.interfaces import INavigationSections
-from AccessControl.unauthorized import Unauthorized
-
-import logging
+from zope.component import getMultiAdapter, queryAdapter
+from zope.schema.vocabulary import SimpleTerm
 
 logger = logging.getLogger("Products.NavigationManager")
 
