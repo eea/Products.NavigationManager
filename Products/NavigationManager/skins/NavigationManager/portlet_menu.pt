@@ -13,8 +13,8 @@
 ">
 
 <dl class="portlet" id="portlet-navigation-tree" tal:define="
-  parent python:submenu[0];children python:submenu[1];">
-  <dt class="portletHeader" >
+parent python:submenu[0];children python:submenu[1] if len(submenu) > 1 else [];">
+  <dt class="portletHeader" tal:condition="parent">
     <a href="" tal:content="parent/title"
       tal:attributes="
         href python:view.getItemUrl(parent['url'], relativeurls);
