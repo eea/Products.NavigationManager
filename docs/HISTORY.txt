@@ -1,8 +1,8 @@
 Changelog
 =========
 
-5.7.dev0 - (unreleased)
------------------------
+5.7 - (2017-01-30)
+------------------
 * Bug fix: fix portlet_menu from failing if there aren't any
   submenus
   [ichim-david refs #80210]
