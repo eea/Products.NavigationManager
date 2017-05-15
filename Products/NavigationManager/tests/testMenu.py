@@ -2,8 +2,8 @@
 """
 import unittest
 from Products.NavigationManager.tests.base import NavigationManagerTestCase
-from zope.component.hooks import setSite
 from Products.NavigationManager.browser import menu
+from zope.component.hooks import setSite
 
 class TestMenu(NavigationManagerTestCase):
     """ Test-cases for class(es) relations. """

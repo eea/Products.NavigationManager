@@ -1,15 +1,13 @@
 """ Menu
 """
 import zope.interface
-
+from zope.component import getMultiAdapter
 from Acquisition import aq_parent, aq_inner, aq_base
 from Products.CMFCore.interfaces._content import ISiteRoot
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory
-
 from Products.Five.browser import BrowserView
 from Products.NavigationManager.browser.interfaces import IMenu
-from zope.component import getMultiAdapter
 
 class Menu(BrowserView):
     """ EEA Menu Navigation View """
@@ -213,5 +211,3 @@ class Menu(BrowserView):
                 return url
         else:
             return url
-
-

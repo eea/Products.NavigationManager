@@ -7,13 +7,13 @@ from Products.CMFPlone.browser.interfaces import INavigationBreadcrumbs
 from Products.CMFPlone.browser.navigation import PhysicalNavigationBreadcrumbs
 from Products.CMFPlone.browser.navigation import get_view_url
 from Products.CMFCore.interfaces import ISiteRoot
-from Acquisition import aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
-from plone.app.layout.viewlets.common import PathBarViewlet
 from Products.NavigationManager.browser.interfaces import (
     IHideBreadcrumbsViewlet,
 )
+from Acquisition import aq_inner
+from plone.app.layout.viewlets.common import PathBarViewlet
 
 class Breadcrumbs(PhysicalNavigationBreadcrumbs):
     """ Custom breadcrumbs

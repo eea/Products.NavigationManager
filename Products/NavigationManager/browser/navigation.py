@@ -4,7 +4,8 @@ import logging
 from Acquisition import aq_base
 
 from zope.interface import implements
-
+from zope.component import getMultiAdapter, queryAdapter
+from zope.schema.vocabulary import SimpleTerm
 from AccessControl.unauthorized import Unauthorized
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import utils
@@ -20,8 +21,6 @@ from plone.app.layout.navigation.interfaces import (
 from plone.app.portlets.portlets.navigation import NavtreeStrategy
 from plone.app.portlets.portlets.navigation import QueryBuilder
 from plone.app.portlets.portlets.navigation import Renderer
-from zope.component import getMultiAdapter, queryAdapter
-from zope.schema.vocabulary import SimpleTerm
 
 logger = logging.getLogger("Products.NavigationManager")
 
