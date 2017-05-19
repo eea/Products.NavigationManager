@@ -301,8 +301,8 @@ def buildFolderTree(context, obj=None, query=None,
                 nodeParent = itemPaths.get(parentPath, None)
                 if nodeParent is not None:
                     nodeAlreadyInserted = False
-                    for i in nodeParent['children']:
-                        if i['item'].getPath() == nodePath:
+                    for j in nodeParent['children']:
+                        if j['item'].getPath() == nodePath:
                             nodeAlreadyInserted = True
                             break
                     if not nodeAlreadyInserted:
@@ -311,7 +311,7 @@ def buildFolderTree(context, obj=None, query=None,
             parentPath = nodePath
 
         # If we were outright missing some nodes, find them again
-        if len(parentPaths) > 0:
+        if parentPaths:
             query = {'path': {'query': parentPaths, 'depth': 0}}
             results = portal_catalog.unrestrictedSearchResults(query)
 

@@ -204,10 +204,8 @@ class Menu(BrowserView):
             elif httpfound and idx1 < 0:
                 #case of http://site.eu
                 return '/'
-            else:
-                # special case. if here then url doesn't start with http.
-                #(we should not have non-http or relative urls in navigation
-                #manager anyway)
-                return url
-        else:
+            # special case. if here then url doesn't start with http.
+            #(we should not have non-http or relative urls in navigation
+            #manager anyway)
             return url
+        return url
