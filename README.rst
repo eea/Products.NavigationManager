@@ -1,10 +1,8 @@
 ======================
 EEA Navigation Manager
 ======================
-.. image:: http://ci.eionet.europa.eu/job/Products.NavigationManager-www/badge/icon
-  :target: http://ci.eionet.europa.eu/job/Products.NavigationManager-www/lastBuild
-.. image:: http://ci.eionet.europa.eu/job/Products.NavigationManager-plone4/badge/icon
-  :target: http://ci.eionet.europa.eu/job/Products.NavigationManager-plone4/lastBuild
+.. image:: http://ci.eionet.europa.eu/job/eea/job/Products.NavigationManager/job/master/badge/icon
+  :target: http://ci.eionet.europa.eu/job/eea/job/Products.NavigationManager/job/master/display/redirect
 
 This is a package that generates the portlet navigation for EEA Site
 
