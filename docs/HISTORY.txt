@@ -1,7 +1,7 @@
 Changelog
 =========
 
-6.1.dev0 - (unreleased)
+6.1 - (2019-01-28)
 -----------------------
 * Change: updated URLs pointing to eea.europa.eu with https://
   [alecghica refs #95849]
@@ -136,7 +136,7 @@ Changelog
 * Feature: Plone 4.x compatible release
   [voineali #4285]
 
-0.3-dev - (unreleased)
+0.3 - (2019-01-28)
 ----------------------
 * Cleanup: of pyflakes violations
   [ichimdav #4141]
