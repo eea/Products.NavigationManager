@@ -1,6 +1,9 @@
 Changelog
 =========
 
+6.2-dev0 - (unreleased)
+---------------------
+
 6.1 - (2019-01-28)
 -----------------------
 * Jenkins: Add sonarqube step
@@ -163,4 +166,3 @@ Changelog
 * Change: fixed a lot of the errors and warnings that pylint gave
   [ichimdav #4140]
 * Initial release
-
