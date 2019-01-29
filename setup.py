@@ -13,7 +13,7 @@ setup(
     description="EEA Navigation Manager skin for EEA",
     long_description=open("README.rst").read() + "\n" +
                      open(os.path.join("docs", "HISTORY.txt")).read(),
-    # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    # https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         "Framework :: Zope2",
         "Framework :: Plone",
