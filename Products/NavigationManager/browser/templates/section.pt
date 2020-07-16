@@ -4,7 +4,7 @@
   condition="python:view.display(section)">
 
   <dt class="portletSubMenuHeader">
-    <span class="title eea-icon-right-container" i18n:translate=""
+    <span class="title eea-icon-left-container" i18n:translate=""
       tal:content="sectionTitle">Menu 1</span>
   </dt>
 
