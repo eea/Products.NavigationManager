@@ -2,7 +2,7 @@ Changelog
 =========
 
 6.2-dev0 - (unreleased)
----------------------
+--------------------------
 * Move accordion arrow to the left of the menu title instead of the right
   [ichim-david refs #120363]
 
